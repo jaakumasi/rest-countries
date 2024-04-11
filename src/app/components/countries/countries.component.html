@@ -1,1 +1,24 @@
-<p>countries works!</p>
+<div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+  <div class="search-and-filter">
+    <div class="search">
+      <input type="text" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }" />
+      @if(!(state$ | async)?.isDarkTheme) {
+      <img
+        src="/assets/images/search-icon-light.svg"
+        alt=""
+        class="search-icon"
+      />
+      } @else {
+      <img
+        src="/assets/images/search-icon-dark.svg"
+        alt=""
+        class="search-icon"
+      />
+      }
+    </div>
+
+    <div class="filter" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+      filter
+    </div>
+  </div>
+</div>

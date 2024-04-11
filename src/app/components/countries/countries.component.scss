@@ -1,0 +1,58 @@
+@import "../../../app/shared/styles/variables";
+
+.countries-page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  &.dark {
+    color: $dark-mode-primary-text-color;
+    background-color: $dark-mode-body-bg;
+  }
+
+  .search-and-filter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    .search,
+    .filter {
+      margin: 0 5rem;
+    }
+
+    .search {
+      position: relative;
+
+      input {
+        padding: 1rem 1rem 1rem 4rem;
+        min-width: 400px;
+        font-size: 1.1rem;
+        border-width: 0;
+        background-color: $light-mode-component-bg;
+
+        &.dark {
+          background-color: $dark-mode-component-bg;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    .filter {
+      color: red;
+      &.dark {
+        color: $dark-mode-primary-text-color;
+        background-color: $dark-mode-component-bg;
+      }
+    }
+  }
+}

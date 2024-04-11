@@ -1,0 +1,54 @@
+@import "../../../shared/styles/variables";
+
+.header {
+  width: 100%;
+  padding: 1.2rem 0;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  background-color: $light-mode-component-bg;
+
+  &.dark {
+    color: $dark-mode-primary-text-color;
+    background-color: $dark-mode-component-bg;
+  }
+
+  .header-label {
+    font-size: 22px;
+    margin-left: 5rem;
+    font-family: "NunitoSans-ExtraBold" !important;
+
+    @media (max-width: $small-screen-max-width) {
+      font-size: 14px;
+      margin-left: 1rem;
+    }
+  }
+
+  .theme-toggler {
+    display: flex;
+    align-items: center;
+    margin-right: 5rem;
+
+    @media (max-width: $small-screen-max-width) {
+      margin-right: 1rem;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    .theme-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-right: 10px;
+    }
+
+    .theme-label {
+      font-weight: bold;
+
+      @media (max-width: $small-screen-max-width) {
+        font-size: 14px;
+      }
+    }
+  }
+}
