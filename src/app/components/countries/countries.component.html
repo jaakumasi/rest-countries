@@ -1,7 +1,11 @@
 <div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
   <div class="search-and-filter">
     <div class="search">
-      <input type="text" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }" />
+      <input
+        type="text"
+        placeholder="search for a country"
+        [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+      />
       @if(!(state$ | async)?.isDarkTheme) {
       <img
         src="/assets/images/search-icon-light.svg"
@@ -17,8 +21,30 @@
       }
     </div>
 
-    <div class="filter" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
-      filter
+    <div
+      class="filter"
+      (click)="handleShowSelectOptions()"
+      [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+    >
+      <div class="filter-label">Filter by Region</div>
+      @if ((state$ | async)?.isDarkTheme) {
+      <img src="/assets/images/light-mode.svg" alt="" />
+      <!-- <img src="/assets/images/filter-dropdown-icon-dark-mode.svg" alt="" /> -->
+      } @else {
+      <img src="/assets/images/dark-mode.svg" alt="" />
+      <!-- <img src="/assets/images/filter-dropdown-icon-light-mode.svg" alt="" /> -->
+      }
+
+      <!---->
+      @if(showSelectOptions) {
+      <div class="options" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+        @for (option of selectOptions; track $index) {
+        <div class="option" (click)="handleFilterOption(option)">
+          {{ option }}
+        </div>
+        }
+      </div>
+      }
     </div>
   </div>
 </div>

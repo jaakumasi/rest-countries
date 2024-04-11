@@ -13,10 +13,20 @@ import { Observable } from 'rxjs';
 })
 export class CountriesComponent {
   store = inject(Store);
-  isDarkMode = false;
   state$!: Observable<SharedState>;
+  showSelectOptions = false;
+  selectOptions = ['Africa', 'America', 'Asia', 'Europe', 'Oceania'];
 
   ngOnInit(): void {
-    this.state$ = this.store.select('setStateReducer');
+    this.state$ = this.store.select('toggleThemeReducer');
+    // this.state$.subscribe((state) => console.log(state));
   }
+
+  handleShowSelectOptions() {
+    this.showSelectOptions
+      ? (this.showSelectOptions = false)
+      : (this.showSelectOptions = true);
+  }
+
+  handleFilterOption(option: string) {}
 }

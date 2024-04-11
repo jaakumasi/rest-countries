@@ -30,9 +30,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.state$ = this.store.select('toggleThemeReducer');
-    this.state$.subscribe(state => console.log(state))
+    // this.state$.subscribe(state => console.log(state))
   }
-  
+
   toggleTheme() {
     this.store.dispatch(toggleThemeAction({}));
   }

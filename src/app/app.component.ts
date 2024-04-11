@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
     console.log('local theme -- ', getLocalTheme);
 
     if (getLocalTheme != null) {
-      this.store.dispatch(toggleThemeAction({ value: Boolean(getLocalTheme) }));
+      // this.store.dispatch(toggleThemeAction({ value: Boolean(getLocalTheme) }));
     }
   }
 }
