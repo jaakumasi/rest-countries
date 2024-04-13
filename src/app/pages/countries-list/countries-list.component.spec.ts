@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CountriesComponent } from './countries.component';
+import { CountriesComponent } from './countries-list.component';
 
 describe('CountriesComponent', () => {
   let component: CountriesComponent;
@@ -8,10 +8,9 @@ describe('CountriesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CountriesComponent]
-    })
-    .compileComponents();
-    
+      imports: [CountriesComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CountriesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,4 +1,5 @@
 <div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+  @if(!showSelectedCountryDetails()) {
   <div class="search-and-filter">
     <div class="search">
       <input
@@ -23,7 +24,7 @@
 
     <div
       class="filter"
-      (click)="handleShowSelectOptions()"
+      (click)="onShowfilterByRegionOptions()"
       [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
     >
       <div class="filter-label">Filter by Region</div>
@@ -36,10 +37,10 @@
       }
 
       <!---->
-      @if(showSelectOptions) {
+      @if(showfilterByRegionOptions()) {
       <div class="options" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
-        @for (option of selectOptions; track $index) {
-        <div class="option" (click)="handleFilterOption(option)">
+        @for (option of filterByRegionOptions(); track $index) {
+        <div class="option" (click)="onFilterOption(option)">
           {{ option }}
         </div>
         }
@@ -47,4 +48,19 @@
       }
     </div>
   </div>
+
+  <!--countries list-->
+  <div class="countries-list-container">
+    <div class="countries-list">
+      @for (item of [1,2,3,4,5]; track $index) {
+      <app-country
+        [countryIndex]="$index"
+        (clickEvent)="onCountryClick($event)"
+      ></app-country>
+      }
+    </div>
+  </div>
+  } @else {
+  <!-- <app-country-details [details]=""></app-country-details> -->
+  }
 </div>
