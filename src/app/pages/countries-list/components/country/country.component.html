@@ -1,1 +1,22 @@
-<div class="country" (click)="onCountryClick()">sdvjsikivjsvij</div>
+<div class="country" (click)="onCountryClick()">
+  <div class="flag">
+    <img [src]="details.flags.png" />
+  </div>
+  <div class="details-container">
+    <div class="details">
+      <div class="country">{{ details.name.common }}</div>
+      <div class="population">
+        <span class="label">Population: </span
+        ><span class="detail">{{ details.population | number }}</span>
+      </div>
+      <div class="region">
+        <span class="label">Region: </span
+        ><span class="detail">{{ details.region }}</span>
+      </div>
+      <div class="capital">
+        <span class="label">Capital: </span
+        ><span class="detail">{{ details.capital }}</span>
+      </div>
+    </div>
+  </div>
+</div>

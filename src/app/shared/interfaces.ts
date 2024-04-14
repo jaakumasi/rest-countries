@@ -1,8 +1,15 @@
 export type Country = {
-  name: string;
+  name: {
+    common: string;
+  };
   borders: string[];
   capital: string;
   currencies: string[];
+  flags: {
+    alt?: string;
+    png?: string;
+    svg?: string;
+  };
   languages: string[];
   population: number;
   region: string;

@@ -7,9 +7,15 @@ export const REQUIRED_COUNTRY_FIELDS = {
   BORDERS: 'borders',
   CAPITAL: 'capital',
   CURRENCIES: 'currencies',
+  FLAGS: 'flags',
   LANGUAGES: 'languages',
   POPULATION: 'population',
   REGION: 'region',
   SUBREGION: 'subregion',
   TLD: 'tld',
+};
+
+export const ERROR_MESSAGES = {
+  TIMEOUT: 'timeout',
+  EMPTY_LIST: 'empty_list',
 };

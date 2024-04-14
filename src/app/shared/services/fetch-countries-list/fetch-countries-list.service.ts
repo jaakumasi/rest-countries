@@ -26,21 +26,7 @@ export class FetchCountriesListService {
     'algeria',
   ];
 
-  getInitialCountriesList() {
-    // console.log('filtered fields: ', this.filteredResponseFieldsString);
-
-    // this.initialCountries.forEach((country) => {
-    //   this.http
-    //     .get(
-    //       `${REST_COUNTRIES_API}/name/${country}` //?fields=${this.filteredResponseFieldsString}`
-    //     )
-    //     .subscribe((response: any) => {
-    //       console.log(response);
-
-    //       if (!response.status) countriesData.push(response[0]);
-    //     });
-    // });
-
+  getInitialCountriesList(): Observable<Country[]> {
     const requests: Observable<any>[] = this.initialCountries.map((country) =>
       this.http.get(
         `${REST_COUNTRIES_API}/name/${country}?fields=${this.filteredResponseFieldsString}`
@@ -55,6 +41,20 @@ export class FetchCountriesListService {
           .filter((response) => response.status !== 404)
           .map((response) => response[0]);
       })
+    );
+  }
+
+  getFilteredByRegionCountriesList(region: string): Observable<Country[]> {
+    // @ts-ignore
+    return this.http.get(
+      `${REST_COUNTRIES_API}/region/${region}?fields=${this.filteredResponseFieldsString}`
+    );
+  }
+
+  getCountryQueryList(query: string): Observable<Country[]> {
+    //@ts-ignore
+    return this.http.get(
+      `${REST_COUNTRIES_API}/name/${query}?fields=${this.filteredResponseFieldsString}`
     );
   }
 }

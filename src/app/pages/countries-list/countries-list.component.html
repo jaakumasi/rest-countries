@@ -3,6 +3,7 @@
   <div class="search-and-filter">
     <div class="search">
       <input
+        #searchField
         type="text"
         placeholder="search for a country"
         [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
@@ -29,11 +30,18 @@
     >
       <div class="filter-label">Filter by Region</div>
       @if ((state$ | async)?.isDarkTheme) {
-      <img src="/assets/images/light-mode.svg" alt="" />
-      <!-- <img src="/assets/images/filter-dropdown-icon-dark-mode.svg" alt="" /> -->
+      <img
+        src="/assets/images/drop-down-filter-icon-dark.svg"
+        class="filter-drop-down-icon"
+        [ngClass]="{ active: showfilterByRegionOptions() }"
+        alt=""
+      />
       } @else {
-      <img src="/assets/images/dark-mode.svg" alt="" />
-      <!-- <img src="/assets/images/filter-dropdown-icon-light-mode.svg" alt="" /> -->
+      <img
+        src="/assets/images/drop-down-filter-icon-light.svg"
+        [ngClass]="{ active: showfilterByRegionOptions() }"
+        alt=""
+      />
       }
 
       <!---->
@@ -49,18 +57,21 @@
     </div>
   </div>
 
-  <!--countries list-->
+  <!--countries-->
+  @if(isLoading()) {
+  <img src="/assets/images/loading.gif" class="loading" />
+  } @else if(isTimedOut()){
+  <div class="timedout">timedout</div>
+  } @else {
   <div class="countries-list-container">
     <div class="countries-list">
-      @for (item of [1,2,3,4,5]; track $index) {
-      <app-country
-        [countryIndex]="$index"
-        (clickEvent)="onCountryClick($event)"
-      ></app-country>
+      @for (country of countries; track $index) {
+      <app-country [details]="country"></app-country>
       }
     </div>
   </div>
-  } @else {
+  <!-- <div class="countries-list-margin-bottom">dfvgfb</div> -->
+  }} @else {
   <!-- <app-country-details [details]=""></app-country-details> -->
   }
 </div>
