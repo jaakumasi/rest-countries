@@ -2,8 +2,14 @@
   <div class="flag">
     <img [src]="details.flags.png" />
   </div>
-  <div class="details-container">
-    <div class="details">
+  <div
+    class="details-container"
+    [ngClass]="{ dark: (state$ | async).isDarkTheme }"
+  >
+    <div class="details"
+    [ngClass]="{ dark: (state$ | async).isDarkTheme }"
+    
+    >
       <div class="country">{{ details.name.common }}</div>
       <div class="population">
         <span class="label">Population: </span

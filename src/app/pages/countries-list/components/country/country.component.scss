@@ -9,7 +9,9 @@
   }
 
   .flag {
-    height: clamp(50%, 50%, 50%);
+    // height: clamp(47%, 47%, 47%);
+    // height: clamp(45%, 45%, 45%);
+    height: 50%;
   }
 
   .flag img {
@@ -22,16 +24,23 @@
   .details-container {
     background-color: $light-mode-component-bg;
     padding: 0.8rem 1rem;
-    height: 40%;
+    height: clamp(50%, 50%, 50%);
+    // height: 50%;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
 
-    .dark {
+    &.dark {
       background-color: $dark-mode-component-bg;
     }
 
     .details {
-      //   margin: auto 1rem;
+      & * {
+        margin-bottom: 0.5rem;
+      }
+
+      &.dark span.detail {
+        color: $dark-mode-light-text-color;
+      }
 
       .country {
         // margin: 0.8rem 0;

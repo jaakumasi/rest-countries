@@ -16,6 +16,6 @@ export const REQUIRED_COUNTRY_FIELDS = {
 };
 
 export const ERROR_MESSAGES = {
-  TIMEOUT: 'timeout',
-  EMPTY_LIST: 'empty_list',
+  TIMEOUT: 'Request timed out ⏲ Please refresh ❗',
+  NOT_FOUND: 'Sorry, no matching results found ❗',
 };

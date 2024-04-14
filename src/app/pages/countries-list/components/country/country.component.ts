@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Country } from '../../../../shared/interfaces';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-country',
@@ -13,6 +14,8 @@ export class CountryComponent {
   @Output() clickEvent = new EventEmitter<number>();
   @Input() countryIndex!: number;
   @Input() details!: Country;
+
+  state$ = inject(Store).select('toggleThemeReducer');
 
   onCountryClick() {
     this.clickEvent.emit(this.countryIndex);

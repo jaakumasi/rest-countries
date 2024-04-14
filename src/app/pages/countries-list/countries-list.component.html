@@ -1,77 +1,94 @@
 <div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+  <!--show search & filter when NOT displaying a particular country's details-->
   @if(!showSelectedCountryDetails()) {
-  <div class="search-and-filter">
-    <div class="search">
-      <input
-        #searchField
-        type="text"
-        placeholder="search for a country"
+    <div class="search-and-filter">
+      <div class="search">
+        <input
+          #searchField
+          type="text"
+          placeholder="search for a country"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+        />
+        @if(!(state$ | async)?.isDarkTheme) {
+        <img
+          src="/assets/images/search-icon-light.svg"
+          alt=""
+          class="search-icon"
+        />
+        } @else {
+        <img
+          src="/assets/images/search-icon-dark.svg"
+          alt=""
+          class="search-icon"
+        />
+        }
+      </div>
+
+      <div
+        class="filter"
+        (click)="onShowfilterByRegionOptions()"
         [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
-      />
-      @if(!(state$ | async)?.isDarkTheme) {
-      <img
-        src="/assets/images/search-icon-light.svg"
-        alt=""
-        class="search-icon"
-      />
-      } @else {
-      <img
-        src="/assets/images/search-icon-dark.svg"
-        alt=""
-        class="search-icon"
-      />
-      }
-    </div>
+      >
+        <div class="filter-label">Filter by Region</div>
+        @if ((state$ | async)?.isDarkTheme) {
+        <img
+          src="/assets/images/drop-down-filter-icon-dark.svg"
+          class="filter-drop-down-icon"
+          [ngClass]="{ active: showfilterByRegionOptions() }"
+          alt=""
+        />
+        } @else {
+        <img
+          src="/assets/images/drop-down-filter-icon-light.svg"
+          [ngClass]="{ active: showfilterByRegionOptions() }"
+          alt=""
+        />
+        }
 
-    <div
-      class="filter"
-      (click)="onShowfilterByRegionOptions()"
-      [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
-    >
-      <div class="filter-label">Filter by Region</div>
-      @if ((state$ | async)?.isDarkTheme) {
-      <img
-        src="/assets/images/drop-down-filter-icon-dark.svg"
-        class="filter-drop-down-icon"
-        [ngClass]="{ active: showfilterByRegionOptions() }"
-        alt=""
-      />
-      } @else {
-      <img
-        src="/assets/images/drop-down-filter-icon-light.svg"
-        [ngClass]="{ active: showfilterByRegionOptions() }"
-        alt=""
-      />
-      }
-
-      <!---->
-      @if(showfilterByRegionOptions()) {
-      <div class="options" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
-        @for (option of filterByRegionOptions(); track $index) {
-        <div class="option" (click)="onFilterOption(option)">
-          {{ option }}
+        @if(showfilterByRegionOptions()) {
+        <div class="options" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+          @for (option of filterByRegionOptions(); track $index) {
+          <div class="option" (click)="onFilterOption(option)">
+            {{ option }}
+          </div>
+          }
         </div>
         }
       </div>
-      }
     </div>
-  </div>
 
-  <!--countries-->
-  @if(isLoading()) {
-  <img src="/assets/images/loading.gif" class="loading" />
-  } @else if(isTimedOut()){
-  <div class="timedout">timedout</div>
-  } @else {
-  <div class="countries-list-container">
-    <div class="countries-list">
-      @for (country of countries; track $index) {
-      <app-country [details]="country"></app-country>
-      }
+    @if(isLoading()) {
+    <div class="loading-gif">
+      <img src="/assets/images/loading.gif" class="loading-gif" />
     </div>
-  </div>
-  <!-- <div class="countries-list-margin-bottom">dfvgfb</div> -->
-  }} @else {
-  <!-- <app-country-details [details]=""></app-country-details> -->
+    }
+    @else if(showErrorMsg()){
+      <div class="error-msg-container">
+        <div 
+          class="error-msg"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+        >
+          {{errorMsg()}}
+        </div>
+      </div> 
+    }
+    @else {
+    <div class="countries-list-container">
+      <div class="countries-list">
+        @for (country of countries; track $index) {
+        <app-country
+          [details]="country"
+          [countryIndex]="$index"
+          (clickEvent)="onCountryClick($event)"
+        ></app-country>
+        }
+      </div>
+    </div>
+    }
+  } 
+  @else {<!--show selected country details-->
+  <app-country-details
+    [details]="countries[selectedCountryIndex()]"
+  ></app-country-details>
   }
 </div>

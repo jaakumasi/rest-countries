@@ -34,10 +34,9 @@ import { CountryComponent } from './components/country/country.component';
 export class CountriesComponent implements OnInit, AfterViewInit {
   @ViewChild('searchField') searchField!: ElementRef;
 
-  store = inject(Store);
+  state$: Observable<SharedState> = inject(Store).select('toggleThemeReducer');
   fetchCountries = inject(FetchCountriesListService);
 
-  state$: Observable<SharedState> = this.store.select('toggleThemeReducer');
   showfilterByRegionOptions = signal<boolean>(false);
   showSelectedCountryDetails = signal<boolean>(false);
   filterByRegionOptions = signal<string[]>([
@@ -48,18 +47,19 @@ export class CountriesComponent implements OnInit, AfterViewInit {
     'Oceania',
   ]);
   isLoading = signal<boolean>(true);
-  isTimedOut = signal<boolean>(false);
   showErrorMsg = signal<boolean>(false);
   errorMsg = signal<string>(''); // timeout or empty list msg
   countries: Country[] = [];
+  selectedCountryIndex = signal<number>(0);
 
   requestTimeout = () =>
     setTimeout(() => {
       if (this.countries.length === 0) {
         this.isLoading.set(false);
-        this.isTimedOut.set(true);
+        this.errorMsg.set(ERROR_MESSAGES.TIMEOUT);
+        this.showErrorMsg.set(true);
       }
-    }, 15000);
+    }, 5000);
 
   ngOnInit(): void {
     this.onRequestStart();
@@ -68,29 +68,28 @@ export class CountriesComponent implements OnInit, AfterViewInit {
       next: (list) => {
         this.onRequestResolved(list);
       },
-      error: (error: Error) => console.log(error.message),
+      // error: (error: Error) => console.log(error.message),
     });
   }
 
   ngAfterViewInit(): void {
     /* subscribel to search query input changes */
     fromEvent(this.searchField.nativeElement, 'input')
-      .pipe(
-        // filter(() => this.searchField.nativeElement.value !== ''),
-        debounceTime(1000)
-      )
+      .pipe(debounceTime(1000))
       .subscribe(() => {
         this.onRequestStart();
 
         const query = this.searchField.nativeElement.value;
+        /* fetch initial countries list if the query is empty */
         if (query === '') {
           this.fetchCountries
             .getInitialCountriesList()
             .subscribe((list) => this.onRequestResolved(list));
         } else {
-          this.fetchCountries
-            .getCountryQueryList(query)
-            .subscribe((matches) => this.onRequestResolved(matches));
+          this.fetchCountries.getCountryQueryList(query).subscribe({
+            next: (matches) => this.onRequestResolved(matches),
+            error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
+          });
         }
       });
   }
@@ -115,22 +114,28 @@ export class CountriesComponent implements OnInit, AfterViewInit {
 
   /* handles switching to selected country details mode */
   onCountryClick(countryIndex: number) {
-    console.log(countryIndex);
+    // console.log(countryIndex);
+    this.selectedCountryIndex.set(countryIndex);
+    this.showSelectedCountryDetails.set(true);
   }
 
   onRequestStart() {
-    this.isTimedOut.set(false);
+    this.showErrorMsg.set(false);
     this.isLoading.set(true);
     this.requestTimeout();
   }
 
-  onRequestResolved(list: Country[]) {
+  /* when called with a message means there's an error*/
+  onRequestResolved(list: Country[], msg?: string) {
     clearTimeout(this.requestTimeout());
-    if (list.length !== 0) this.countries = list;
-    else {
-      this.errorMsg.set(ERROR_MESSAGES.EMPTY_LIST);
-      this.showErrorMsg.set(true);
-    }
     this.isLoading.set(false);
+    
+    if (msg) {
+      this.errorMsg.set(msg);
+      this.showErrorMsg.set(true);
+      return;
+    }
+    this.showErrorMsg.set(false);
+    this.countries = list;
   }
 }
