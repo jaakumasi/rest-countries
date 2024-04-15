@@ -1,27 +1,35 @@
 <div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
   <!--show search & filter when NOT displaying a particular country's details-->
-  @if(!showSelectedCountryDetails()) {
+  <div
+    *ngIf="showSelectedCountryDetails(); then countryDetails; else countryList"
+  ></div>
+
+  <ng-template #countryList>
     <div class="search-and-filter">
       <div class="search">
         <input
           #searchField
           type="text"
           placeholder="search for a country"
+          (input)="onSearchQueryChange($event)"
           [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
         />
-        @if(!(state$ | async)?.isDarkTheme) {
-        <img
-          src="/assets/images/search-icon-light.svg"
-          alt=""
-          class="search-icon"
-        />
-        } @else {
-        <img
-          src="/assets/images/search-icon-dark.svg"
-          alt=""
-          class="search-icon"
-        />
-        }
+        <!--light mode search icon-->
+        <ng-template [ngIf]="!(state$ | async)?.isDarkTheme">
+          <img
+            src="/assets/images/search-icon-light.svg"
+            alt=""
+            class="search-icon"
+          />
+        </ng-template>
+        <!--dark mode search icon-->
+        <ng-template [ngIf]="(state$ | async)?.isDarkTheme">
+          <img
+            src="/assets/images/search-icon-dark.svg"
+            alt=""
+            class="search-icon"
+          />
+        </ng-template>
       </div>
 
       <div
@@ -30,65 +38,74 @@
         [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
       >
         <div class="filter-label">Filter by Region</div>
-        @if ((state$ | async)?.isDarkTheme) {
-        <img
-          src="/assets/images/drop-down-filter-icon-dark.svg"
-          class="filter-drop-down-icon"
-          [ngClass]="{ active: showfilterByRegionOptions() }"
-          alt=""
-        />
-        } @else {
-        <img
-          src="/assets/images/drop-down-filter-icon-light.svg"
-          [ngClass]="{ active: showfilterByRegionOptions() }"
-          alt=""
-        />
-        }
+        <!--light mode dropdown icon-->
+        <ng-template [ngIf]="!(state$ | async)?.isDarkTheme">
+          <img
+            src="/assets/images/drop-down-filter-icon-light.svg"
+            class="filter-drop-down-icon"
+            [ngClass]="{ active: showfilterByRegionOptions() }"
+            alt=""
+          />
+        </ng-template>
+        <!--dark mode dropdown icon-->
+        <ng-template [ngIf]="(state$ | async)?.isDarkTheme">
+          <img
+            src="/assets/images/drop-down-filter-icon-dark.svg"
+            class="filter-drop-down-icon"
+            [ngClass]="{ active: showfilterByRegionOptions() }"
+            alt=""
+          />
+        </ng-template>
 
-        @if(showfilterByRegionOptions()) {
-        <div class="options" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
-          @for (option of filterByRegionOptions(); track $index) {
-          <div class="option" (click)="onFilterOption(option)">
-            {{ option }}
+        <ng-template [ngIf]="showfilterByRegionOptions()">
+          <div
+            class="options"
+            [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+          >
+            @for (option of filterByRegionOptions(); track $index) {
+            <div class="option" (click)="onFilterOption(option)">
+              {{ option }}
+            </div>
+            }
           </div>
-          }
-        </div>
-        }
+        </ng-template>
       </div>
     </div>
 
-    @if(isLoading()) {
-    <div class="loading-gif">
-      <img src="/assets/images/loading.gif" class="loading-gif" />
-    </div>
-    }
-    @else if(showErrorMsg()){
+    <ng-template [ngIf]="isLoading()">
+      <div class="loading-gif">
+        <img src="/assets/images/loading.gif" class="loading-gif" />
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="showErrorMsg()">
       <div class="error-msg-container">
-        <div 
+        <div
           class="error-msg"
           [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
         >
-          {{errorMsg()}}
+          {{ errorMsg() }}
         </div>
-      </div> 
-    }
-    @else {
-    <div class="countries-list-container">
-      <div class="countries-list">
-        @for (country of countries; track $index) {
-        <app-country
-          [details]="country"
-          [countryIndex]="$index"
-          (clickEvent)="onCountryClick($event)"
-        ></app-country>
-        }
       </div>
-    </div>
-    }
-  } 
-  @else {<!--show selected country details-->
-  <app-country-details
-    [details]="countries[selectedCountryIndex()]"
-  ></app-country-details>
-  }
+    </ng-template>
+    <ng-template [ngIf]="!isLoading() && !showErrorMsg()">
+      <div class="countries-list-container">
+        <div class="countries-list">
+          @for (country of countries; track $index) {
+          <app-country
+            [details]="country"
+            [countryIndex]="$index"
+            (clickEvent)="onCountryClick($event)"
+          ></app-country>
+          }
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #countryDetails>
+    <app-country-details
+      [details]="countries[selectedCountryIndex()]"
+      (closeDetailsViewEvent)="onCloseDetailsView()"
+    ></app-country-details>
+  </ng-template>
 </div>

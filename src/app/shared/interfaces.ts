@@ -1,6 +1,7 @@
 export type Country = {
   name: {
     common: string;
+    nativeName: any
   };
   borders: string[];
   capital: string;

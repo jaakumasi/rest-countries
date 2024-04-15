@@ -6,9 +6,9 @@
     class="details-container"
     [ngClass]="{ dark: (state$ | async).isDarkTheme }"
   >
-    <div class="details"
-    [ngClass]="{ dark: (state$ | async).isDarkTheme }"
-    
+    <div 
+      class="details"
+      [ngClass]="{ dark: (state$ | async).isDarkTheme }"
     >
       <div class="country">{{ details.name.common }}</div>
       <div class="population">

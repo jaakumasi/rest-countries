@@ -4,6 +4,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
   inject,
@@ -31,7 +32,7 @@ import { CountryComponent } from './components/country/country.component';
   styleUrl: './countries-list.component.scss',
   providers: [FetchCountriesListService],
 })
-export class CountriesComponent implements OnInit, AfterViewInit {
+export class CountriesComponent implements OnInit {
   @ViewChild('searchField') searchField!: ElementRef;
 
   state$: Observable<SharedState> = inject(Store).select('toggleThemeReducer');
@@ -72,7 +73,15 @@ export class CountriesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
+  // ngOnDestroy(): void {
+  //   console.log('destroy');
+  // }
+
+  // ngAfterViewInit(): void {
+  //   this.onSubscribeToSearchQueryInput();
+  // }
+
+  onSearchQueryChange(event: any) {
     /* subscribel to search query input changes */
     fromEvent(this.searchField.nativeElement, 'input')
       .pipe(debounceTime(1000))
@@ -119,6 +128,12 @@ export class CountriesComponent implements OnInit, AfterViewInit {
     this.showSelectedCountryDetails.set(true);
   }
 
+  onCloseDetailsView() {
+    this.showSelectedCountryDetails.set(false);
+    // this.ngAfterViewInit();
+    // this.cdRef.markForCheck();
+  }
+
   onRequestStart() {
     this.showErrorMsg.set(false);
     this.isLoading.set(true);
@@ -129,7 +144,7 @@ export class CountriesComponent implements OnInit, AfterViewInit {
   onRequestResolved(list: Country[], msg?: string) {
     clearTimeout(this.requestTimeout());
     this.isLoading.set(false);
-    
+
     if (msg) {
       this.errorMsg.set(msg);
       this.showErrorMsg.set(true);

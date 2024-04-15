@@ -1,1 +1,82 @@
-<div class="country-details"></div>
+<div
+  class="country-details"
+  [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+>
+  <div
+    class="back"
+    [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+    (click)="onHideSelectedCountryDetails()"
+  >
+    @if (!(state$ | async)?.isDarkTheme) {
+    <img src="/assets/images/back-light.svg" class="back-icon" />
+    } @else {
+    <img src="/assets/images/back-dark.svg" class="back-icon" />
+    }
+    <div class="back-label">Back</div>
+  </div>
+  <div class="main">
+    <div class="flag">
+      <img [src]="details.flags.svg" alt="" />
+    </div>
+    <div class="details">
+      <div class="country">{{ details.name.common }}</div>
+      <div class="details-group">
+        <div
+          class="details-group-1"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+        >
+          <div class="native-name">
+            <span class="label">Native name: </span>
+            <span class="detail">temp name</span>
+          </div>
+          <div class="population">
+            <span class="label">Population: </span>
+            <span class="detail">{{ details.population | number }}</span>
+          </div>
+          <div class="region">
+            <span class="label">Region </span>
+            <span class="detail">{{ details.region }}</span>
+          </div>
+          <div class="sub-region">
+            <span class="label">Sub Region: </span>
+            <span class="detail">{{ details.subregion }}</span>
+          </div>
+          <div class="capital">
+            <span class="label">Capital: </span>
+            <span class="detail">{{ details.capital }}</span>
+          </div>
+        </div>
+        <div
+          class="details-group-2"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+        >
+          <div class="top-level-domain">
+            <span class="label">Top Level Domain: </span>
+            <span class="detail">{{ details.tld }}</span>
+          </div>
+          <div class="currencies">
+            <span class="label">Currencies: </span>
+            <span class="detail">{{ currencies }}</span>
+          </div>
+          <div class="languages">
+            <span class="label">Languages: </span>
+            <span class="detail">{{ languages }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="border-countries-container">
+        <div class="label">Border Countries</div>
+        <div class="border-countries">
+          @for (borderCountry of details.borders; track $index) {
+          <div
+            class="border-country"
+            [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+          >
+            {{ borderCountry }}
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
