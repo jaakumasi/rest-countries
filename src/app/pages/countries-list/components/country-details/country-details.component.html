@@ -67,13 +67,18 @@
       <div class="border-countries-container">
         <div class="label">Border Countries</div>
         <div class="border-countries">
-          @for (borderCountry of details.borders; track $index) {
+          @if(details.borders.length === 0) {
+            <div class="border-country">None</div>
+          }
+          @else {
+            @for (borderCountry of details.borders; track $index) {
           <div
             class="border-country"
             [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
           >
             {{ borderCountry }}
           </div>
+          }
           }
         </div>
       </div>

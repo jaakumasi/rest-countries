@@ -18,6 +18,11 @@
     display: flex;
     background-color: $light-mode-component-bg;
 
+    @media (max-width: $small-screen-max-width) {
+      margin: 1rem 0 2rem 1rem;
+      padding: 0.3rem 2rem;
+    }
+
     &.dark {
       background-color: $dark-mode-component-bg;
     }
@@ -33,13 +38,25 @@
 
   .main {
     margin: 0 5rem;
-    height: 60%;
+    // height: 60%;
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: $medium-screen-max-width) {
+      flex-direction: column;
+    }
+
+    @media (max-width: $small-screen-max-width) {
+      margin: 0 1rem;
+    }
 
     .flag {
       width: 45%;
       height: 100%;
+
+      @media (max-width: $small-screen-max-width) {
+        width: 100%;
+      }
 
       img {
         width: 100%;
@@ -52,6 +69,10 @@
       padding: 2rem 0;
       position: relative;
 
+      @media (max-width: $medium-screen-max-width) {
+        width: 100%;
+      }
+
       .country {
         font-family: "NunitoSans-ExtraBold";
         margin-bottom: 1rem;
@@ -61,6 +82,10 @@
       .details-group {
         display: flex;
         justify-content: space-between;
+
+        @media (max-width: $small-screen-max-width) {
+          flex-direction: column;
+        }
 
         .details-group-1,
         .details-group-2 {
@@ -80,13 +105,26 @@
             color: $dark-mode-light-text-color;
           }
         }
+
+        .details-group-1 {
+          @media (max-width: $small-screen-max-width) {
+            margin-bottom: 1rem;
+          }
+        }
       }
 
       .border-countries-container {
         display: flex;
-        position: absolute;
-        bottom: 2rem;
-        left: 0;
+        margin-top: 3rem;
+
+        // @media (max-width: $medium-screen-max-width) {
+        //   position: relative;
+        //   margin-top: 3rem;
+        // }
+
+        @media (max-width: $small-screen-max-width) {
+          flex-direction: column;
+        }
 
         .label {
           font-weight: bold;
@@ -98,12 +136,16 @@
           display: flex;
           flex-wrap: wrap;
 
+          @media (max-width: $small-screen-max-width) {
+            margin: 1rem 0 0 0.375rem;
+          }
+
           .border-country {
             width: fit-content;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0.2rem 1rem;
+            padding: 0.2rem 2rem;
             margin: 0 0.5rem 0.5rem 0;
             box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
             background-color: $light-mode-component-bg;

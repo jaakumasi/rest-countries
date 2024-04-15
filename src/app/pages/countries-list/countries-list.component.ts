@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
   inject,
-  signal,
+  signal
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, debounceTime, fromEvent } from 'rxjs';
