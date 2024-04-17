@@ -1,7 +1,7 @@
 export type SharedState = {
-  isDarkTheme: boolean;
+  isDarkTheme: 'true' | 'false';
 };
 
 export const state: SharedState = {
-  isDarkTheme: false,
+  isDarkTheme: 'false',
 };

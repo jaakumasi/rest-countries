@@ -1,7 +1,7 @@
-<div class="header" [ngClass]="{ 'dark': (state$ | async)?.isDarkTheme }">
+<div class="header" [ngClass]="{ 'dark': (state$ | async)?.isDarkTheme === 'true' }">
   <div class="header-label">Where in the world?</div>
   <div class="theme-toggler" (click)="toggleTheme()">
-    @if (!(state$ | async)?.isDarkTheme) {
+    @if ((state$ | async)?.isDarkTheme === 'false') {
     <img src="/assets/images/light-mode.svg" class="theme-icon" />
     } @else {
     <img src="/assets/images/dark-mode.svg" class="theme-icon" />

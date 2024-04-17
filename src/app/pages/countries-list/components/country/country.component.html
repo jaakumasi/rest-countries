@@ -4,11 +4,11 @@
   </div>
   <div
     class="details-container"
-    [ngClass]="{ dark: (state$ | async).isDarkTheme }"
+    [ngClass]="{ dark: (state$ | async).isDarkTheme === 'true' }"
   >
     <div 
       class="details"
-      [ngClass]="{ dark: (state$ | async).isDarkTheme }"
+      [ngClass]="{ dark: (state$ | async).isDarkTheme === 'true' }"
     >
       <div class="country-name">{{ details.name.common }}</div>
       <div class="population">

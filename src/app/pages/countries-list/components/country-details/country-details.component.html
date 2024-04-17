@@ -1,13 +1,13 @@
 <div
   class="country-details"
-  [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+  [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true'}"
 >
   <div
     class="back"
-    [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+    [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true'}"
     (click)="onHideSelectedCountryDetails()"
   >
-    @if (!(state$ | async)?.isDarkTheme) {
+    @if ((state$ | async)?.isDarkTheme === 'false') {
     <img src="/assets/images/back-light.svg" class="back-icon" />
     } @else {
     <img src="/assets/images/back-dark.svg" class="back-icon" />
@@ -23,7 +23,7 @@
       <div class="details-group">
         <div
           class="details-group-1"
-          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true'}"
         >
           <div class="native-name">
             <span class="label">Native name: </span>
@@ -48,7 +48,7 @@
         </div>
         <div
           class="details-group-2"
-          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
         >
           <div class="top-level-domain">
             <span class="label">Top Level Domain: </span>
@@ -68,18 +68,20 @@
         <div class="label">Border Countries</div>
         <div class="border-countries">
           @if(details.borders.length === 0) {
-            <div class="border-country">None</div>
-          }
-          @else {
-            @for (borderCountry of details.borders; track $index) {
           <div
             class="border-country"
-            [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+            [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
+          >
+            None
+          </div>
+          } @else { @for (borderCountry of details.borders; track $index) {
+          <div
+            class="border-country"
+            [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
           >
             {{ borderCountry }}
           </div>
-          }
-          }
+          } }
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-<div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme }">
+<div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }">
   <!--show search & filter when NOT displaying a particular country's details-->
   <div
     *ngIf="showSelectedCountryDetails(); then countryDetails; else countryList"
@@ -12,10 +12,10 @@
           type="text"
           placeholder="search for a country"
           (input)="onSearchQueryChange($event)"
-          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
         />
         <!--light mode search icon-->
-        <ng-template [ngIf]="!(state$ | async)?.isDarkTheme">
+        <ng-template [ngIf]="(state$ | async)?.isDarkTheme === 'false'">
           <img
             src="/assets/images/search-icon-light.svg"
             alt=""
@@ -23,7 +23,7 @@
           />
         </ng-template>
         <!--dark mode search icon-->
-        <ng-template [ngIf]="(state$ | async)?.isDarkTheme">
+        <ng-template [ngIf]="(state$ | async)?.isDarkTheme === 'true'">
           <img
             src="/assets/images/search-icon-dark.svg"
             alt=""
@@ -35,11 +35,11 @@
       <div
         class="filter"
         (click)="onShowfilterByRegionOptions()"
-        [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+        [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
       >
         <div class="filter-label">Filter by Region</div>
         <!--light mode dropdown icon-->
-        <ng-template [ngIf]="!(state$ | async)?.isDarkTheme">
+        <ng-template [ngIf]="(state$ | async)?.isDarkTheme === 'false'">
           <img
             src="/assets/images/drop-down-filter-icon-light.svg"
             class="filter-drop-down-icon"
@@ -48,7 +48,7 @@
           />
         </ng-template>
         <!--dark mode dropdown icon-->
-        <ng-template [ngIf]="(state$ | async)?.isDarkTheme">
+        <ng-template [ngIf]="(state$ | async)?.isDarkTheme === 'true'">
           <img
             src="/assets/images/drop-down-filter-icon-dark.svg"
             class="filter-drop-down-icon"
@@ -60,7 +60,7 @@
         <ng-template [ngIf]="showfilterByRegionOptions()">
           <div
             class="options"
-            [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+            [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
           >
             @for (option of filterByRegionOptions(); track $index) {
             <div class="option" (click)="onFilterOption(option)">
@@ -81,7 +81,7 @@
       <div class="error-msg-container">
         <div
           class="error-msg"
-          [ngClass]="{ dark: (state$ | async)?.isDarkTheme }"
+          [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
         >
           {{ errorMsg() }}
         </div>

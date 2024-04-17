@@ -19,10 +19,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // console.log('isDarkMode: ', isDarkMode, ' type: ', typeof isDarkMode)
     const getLocalTheme = localStorage.getItem(IS_DARK_THEME);
-    console.log('local theme -- ', getLocalTheme);
+    console.log('isDarkTheme: ', getLocalTheme, 'type: ', typeof getLocalTheme);
 
     if (getLocalTheme != null) {
-      // this.store.dispatch(toggleThemeAction({ value: Boolean(getLocalTheme) }));
+      this.store.dispatch(toggleThemeAction({ value: getLocalTheme }));
     }
   }
 }
