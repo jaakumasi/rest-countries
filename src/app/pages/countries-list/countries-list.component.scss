@@ -6,6 +6,10 @@
   overflow: hidden;
   background-color: $light-mode-body-bg;
 
+  @media (max-width: $extra-large-screen-max-width) {
+    height: 95%;
+  }
+
   &.dark {
     color: $dark-mode-primary-text-color;
     background-color: $dark-mode-body-bg;
@@ -15,42 +19,31 @@
     display: flex;
     justify-content: space-between;
     margin-top: 2rem;
+    width: 89%;
+    margin: 2rem auto 0 auto;
 
     @media (max-width: $medium-screen-max-width) {
       flex-direction: column;
-      justify-content: center;
-      // width: 90%;
+      width: 78%;
     }
 
     @media (max-width: $small-screen-max-width) {
       flex-direction: column;
-      justify-content: center;
-      // width: 82%;
+      width: 92%;
     }
 
     .search,
     .filter {
-      margin: 0 5rem;
-
-      @media (max-width: $medium-screen-max-width) {
-        margin: 0 5rem 2rem 5rem;
-      }
-
-      @media (max-width: $small-screen-max-width) {
-        margin: 0 1rem 2rem 1rem;
-      }
+      margin-bottom: 2rem;
     }
 
     .search {
       position: relative;
-      // width: 100%;
-
-      @media (max-width: $medium-screen-max-width) {
-        width: 68%;
-      }
+      width: 100%;
 
       input {
         padding: 1rem 1rem 1rem 4rem;
+        box-sizing: border-box;
         min-width: 100%;
         font-size: 1.1rem;
         border-width: 0;
@@ -58,9 +51,9 @@
         box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
         border-radius: 5px;
 
-        // @media (max-width: $medium-screen-max-width) {
-        //   margin-right: 5rem;
-        // }
+        @media (max-width: $medium-screen-max-width) {
+          // margin-bottom: 2rem;
+        }
 
         &::placeholder {
           color: $light-mode-light-text-color;
@@ -93,7 +86,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0 1rem;
+      // padding: 1rem;
       color: $light-mode-primary-text-color;
       background-color: $light-mode-component-bg;
       box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
@@ -102,12 +95,12 @@
 
       @media (max-width: $medium-screen-max-width) {
         width: fit-content;
-        padding: 1rem;
+        padding: 1rem 1.5rem;
       }
 
-      @media (max-width: $small-screen-max-width) {
-        margin: 0 1rem 1rem 1rem;
-      }
+      // @media (max-width: $small-screen-max-width) {
+      //   margin: 0 1rem 1rem 1rem;
+      // }
 
       &:hover {
         cursor: pointer;
@@ -212,6 +205,9 @@
     height: 80%;
     overflow-y: auto;
 
+    @media (max-width: $extra-large-screen-max-width) {
+    }
+
     @media (max-width: $medium-screen-max-width) {
       margin-top: 1rem;
     }
@@ -220,10 +216,20 @@
       height: auto;
       margin: 0 5rem 5rem 5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, 22.75%);
-      grid-auto-rows: 350px;
-      column-gap: 3%;
+
       padding-bottom: 80px;
+
+      @media (max-width: $extra-large-screen-max-width) {
+        grid-template-columns: repeat(auto-fit, 17.6%);
+        grid-auto-rows: 500px;
+        column-gap: 3%;
+      }
+
+      @media (max-width: $large-screen-max-width) {
+        grid-template-columns: repeat(auto-fit, 22.75%);
+        grid-auto-rows: 350px;
+        column-gap: 3%;
+      }
 
       @media (max-width: $medium-screen-max-width) {
         grid-template-columns: repeat(auto-fit, 47%);

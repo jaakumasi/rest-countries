@@ -1,0 +1,20 @@
+<div class="border-countries-container">
+  <div class="label">Border Countries</div>
+  <div class="border-countries">
+    @if(details.borders.length === 0) {
+    <div
+      class="border-country"
+      [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
+    >
+      None
+    </div>
+    } @else { @for (borderCountry of details.borders; track $index) {
+    <div
+      class="border-country"
+      [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
+    >
+      {{ borderCountry }}
+    </div>
+    } }
+  </div>
+</div>
