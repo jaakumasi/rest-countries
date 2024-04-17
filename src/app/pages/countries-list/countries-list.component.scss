@@ -204,28 +204,36 @@
 
   .countries-list-container {
     margin-top: 2rem;
-    height: 70%;
+    height: 80%;
     overflow-y: auto;
 
+    @media (max-width: $medium-screen-max-width) {
+      margin-top: 1rem;
+    }
+
     .countries-list {
-      height: calc(100% + 200px);
-      margin: 0 5rem;
+      // height: calc(100% + 200px);
+      height: auto;
+      // overflow-y: scroll;
+      margin: 0 5rem 5rem 5rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, 22.75%);
-      grid-template-rows: repeat(auto-fit, minmax(250px, 0.5fr));
+      grid-auto-rows: 350px;
       column-gap: 3%;
-      row-gap: 10%;
+      padding-bottom: 80px;
 
       @media (max-width: $medium-screen-max-width) {
-        grid-template-columns: repeat(auto-fit, 45%);
-        column-gap: 10%;
+        grid-template-columns: repeat(auto-fit, 47%);
+        grid-auto-rows: 340px;
+        column-gap: 6%;
       }
 
       @media (max-width: $small-screen-max-width) {
         margin: 0 1rem;
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(auto-fit, minmax(350px, 0.8fr));
-        column-gap: 10%;
+        grid-auto-rows: 420px;
+        // row-gap: 30px;
+        column-gap: 0%;
       }
     }
   }

@@ -18,20 +18,10 @@ import { Store } from '@ngrx/store';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   store = inject(Store);
-  state$!: Observable<SharedState>;
+  state$: Observable<SharedState> = this.store.select('toggleThemeReducer');
 
-  constructor() {
-    // effect(() => {
-    //   console.log('dark mode: ', this.isDarkMode);
-    // });
-  }
-
-  ngOnInit(): void {
-    this.state$ = this.store.select('toggleThemeReducer');
-    // this.state$.subscribe(state => console.log(state))
-  }
 
   toggleTheme() {
     this.store.dispatch(toggleThemeAction({}));

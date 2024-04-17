@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { Observable, forkJoin, map } from 'rxjs';
 import { REST_COUNTRIES_API } from '../../constants';
 import { Country } from '../../interfaces';
 import { FilterResponseFieldsService } from '../filter-response-fields/filter-response-fields.service';
-import { Observable, forkJoin, map, of } from 'rxjs';
-import { response } from 'express';
 
 @Injectable({
   providedIn: 'root',
