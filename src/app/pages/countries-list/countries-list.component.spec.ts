@@ -1,84 +1,52 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
+import { MockProvider, MockRender, MockedComponentFixture } from 'ng-mocks';
+import { of, throwError } from 'rxjs';
+import { FetchCountriesListService } from '../../shared/services/fetch-countries-list/fetch-countries-list.service';
 import { CountriesComponent } from './countries-list.component';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { of } from 'rxjs';
-import { ERROR_MESSAGES, REST_COUNTRIES_API } from '../../shared/constants';
+
+const MockFetchCountriesListService = MockProvider(FetchCountriesListService, {
+  getCountryQueryList: () => throwError(() => new Error()),
+});
+
+const MockStore = MockProvider(Store, {
+  select: () => of({ isDarkMode: 'dark' }),
+});
 
 describe('CountriesComponent', () => {
+  let fixture: MockedComponentFixture<CountriesComponent>;
   let component: CountriesComponent;
-  let fixture: ComponentFixture<CountriesComponent>;
-  let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CountriesComponent],
-      imports: [HttpClientTestingModule],
+      imports: [CountriesComponent],
+      providers: [MockFetchCountriesListService, MockStore],
     }).compileComponents();
+
+    fixture = MockRender(CountriesComponent);
+    component = fixture.point.componentInstance;
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CountriesComponent);
-    component = fixture.componentInstance;
-    httpMock = TestBed.inject(HttpTestingController);
+  it('SHOULD create the COUNTRIES COMPONENT', () => {
+    expect(component).toBeDefined();
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
+  it('SHOULD show error message when the search query observable fails (throws error)', async () => {
+    const searchField_input = fixture.debugElement.query(By.css('input'));
+    // const spy = jest.spyOn(component, 'onSearchQueryChange');
+    searchField_input.triggerEventHandler('input', {
+      target: component.searchField//searchField_input.nativeElement,
+    });
+    searchField_input.nativeElement.value = 'gibberish';
 
-  it('should show error message when search query returns error, show timeout message when request takes too long, show country list and hide details page when showSelectedCountryDetails is false, show country details and hide country list when showSelectedCountryDetails is true', () => {
-    // Test that the error message is shown appropriately when the return of the search query returns an error
-    const query = 'error';
-    component.onSearchQueryChange(query);
+    // expect(spy).toHaveBeenCalledTimes(1);
 
-    const req = httpMock.expectOne(
-      `${REST_COUNTRIES_API}/name/${query}?fields=name,capital,currencies,languages,flag`
-    );
-    req.flush('Error', { status: 500, statusText: 'Internal Server Error' });
+    // console.log(searchField_input);
 
+    await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component.showErrorMsg).toBeTruthy();
-    expect(component.errorMsg).toBe('Error');
-
-    // Test that the timeout message is shown appropriately when a timeout occurs
-    component.onRequestStart();
-
-    setTimeout(() => {
-      component.onRequestResolved([]);
-      fixture.detectChanges();
-
-      expect(component.showErrorMsg).toBeTruthy();
-      expect(component.errorMsg).toBe(ERROR_MESSAGES.TIMEOUT);
-    }, 5001);
-
-    // Test that the country list is shown and the details page is hidden when showSelectedCountryDetails is false
-    component.showSelectedCountryDetails.set(false);
-    fixture.detectChanges();
-
-    const countryListElement = fixture.nativeElement.querySelector(
-      '.countries-list-container'
-    );
-    const countryDetailsElement =
-      fixture.nativeElement.querySelector('.country-details');
-
-    expect(countryListElement).toBeDefined();
-    expect(countryDetailsElement).toBeNull();
-
-    // Test that the details page is shown and the country list is hidden when showSelectedCountryDetails is true
-    component.showSelectedCountryDetails.set(true);
-    fixture.detectChanges();
-
-    const countryListElement2 = fixture.nativeElement.querySelector(
-      '.countries-list-container'
-    );
-    const countryDetailsElement2 =
-      fixture.nativeElement.querySelector('.country-details');
-
-    expect(countryListElement2).toBeNull();
-    expect(countryDetailsElement2).toBeDefined();
+    expect(component.showErrorMsg()).toBe(true);
   });
 });

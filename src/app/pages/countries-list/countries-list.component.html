@@ -11,7 +11,6 @@
           #searchField
           type="text"
           placeholder="search for a country"
-          (input)="onSearchQueryChange($event)"
           [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
         />
         <!--light mode search icon-->

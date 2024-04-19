@@ -9,7 +9,10 @@ import { FilterResponseFieldsService } from '../filter-response-fields/filter-re
   providedIn: 'root',
 })
 export class FetchCountriesListService {
-  http = inject(HttpClient);
+  // http = inject(HttpClient);
+
+  constructor(private http: HttpClient){}
+
   filteredResponseFieldsString = inject(
     FilterResponseFieldsService
   ).getFilteredResponseFields();

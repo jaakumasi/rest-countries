@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
+  AfterViewChecked,
   Component,
   ElementRef,
   OnInit,
   ViewChild,
   inject,
-  signal
+  signal,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, debounceTime, fromEvent } from 'rxjs';
+import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
 import { ERROR_MESSAGES } from '../../shared/constants';
 import { Country } from '../../shared/interfaces';
 import { FetchCountriesListService } from '../../shared/services/fetch-countries-list/fetch-countries-list.service';
@@ -30,8 +31,9 @@ import { CountryComponent } from './components/country/country.component';
   styleUrl: './countries-list.component.scss',
   providers: [FetchCountriesListService],
 })
-export class CountriesComponent implements OnInit {
+export class CountriesComponent implements OnInit, AfterViewChecked {
   @ViewChild('searchField') searchField!: ElementRef;
+  searchFieldSubscription?: Subscription;
 
   state$: Observable<SharedState> = inject(Store).select('toggleThemeReducer');
   fetchCountries = inject(FetchCountriesListService);
@@ -67,38 +69,30 @@ export class CountriesComponent implements OnInit {
       next: (list) => {
         this.onRequestResolved(list);
       },
-      // error: (error: Error) => console.log(error.message),
     });
   }
 
-  // ngOnDestroy(): void {
-  //   console.log('destroy');
-  // }
+  ngAfterViewChecked(): void {
+    if (!this.searchFieldSubscription) {
+      fromEvent(this.searchField.nativeElement, 'input')
+        .pipe(debounceTime(1000))
+        .subscribe(() => {
+          this.onRequestStart();
 
-  // ngAfterViewInit(): void {
-  //   this.onSubscribeToSearchQueryInput();
-  // }
-
-  onSearchQueryChange(event: any) {
-    /* subscribel to search query input changes */
-    fromEvent(this.searchField.nativeElement, 'input')
-      .pipe(debounceTime(1000))
-      .subscribe(() => {
-        this.onRequestStart();
-
-        const query = this.searchField.nativeElement.value;
-        /* fetch initial countries list if the query is empty */
-        if (query === '') {
-          this.fetchCountries
-            .getInitialCountriesList()
-            .subscribe((list) => this.onRequestResolved(list));
-        } else {
-          this.fetchCountries.getCountryQueryList(query).subscribe({
-            next: (matches) => this.onRequestResolved(matches),
-            error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
-          });
-        }
-      });
+          const query = this.searchField.nativeElement.value;
+          /* fetch initial countries list if the query is empty */
+          if (query === '') {
+            this.fetchCountries
+              .getInitialCountriesList()
+              .subscribe((list) => this.onRequestResolved(list));
+          } else {
+            this.fetchCountries.getCountryQueryList(query).subscribe({
+              next: (matches) => this.onRequestResolved(matches),
+              error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
+            });
+          }
+        });
+    }
   }
 
   onShowfilterByRegionOptions() {
