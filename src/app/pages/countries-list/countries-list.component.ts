@@ -4,6 +4,7 @@ import {
   AfterViewChecked,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
   inject,
@@ -31,7 +32,7 @@ import { CountryComponent } from './components/country/country.component';
   styleUrl: './countries-list.component.scss',
   providers: [FetchCountriesListService],
 })
-export class CountriesComponent implements OnInit, AfterViewChecked {
+export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('searchField') searchField!: ElementRef;
   searchFieldSubscription?: Subscription;
 
@@ -74,10 +75,14 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     if (!this.searchFieldSubscription) {
-      fromEvent(this.searchField.nativeElement, 'input')
+      this.searchFieldSubscription = fromEvent(
+        this.searchField.nativeElement,
+        'input'
+      )
         .pipe(debounceTime(1000))
         .subscribe(() => {
           this.onRequestStart();
+          console.log('subscription run-----------------------'); 
 
           const query = this.searchField.nativeElement.value;
           /* fetch initial countries list if the query is empty */
@@ -88,11 +93,18 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
           } else {
             this.fetchCountries.getCountryQueryList(query).subscribe({
               next: (matches) => this.onRequestResolved(matches),
-              error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
+              error: () => {
+                console.log('error-------------------------------');
+                this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND);
+              },
             });
           }
         });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.searchFieldSubscription?.unsubscribe();
   }
 
   onShowfilterByRegionOptions() {

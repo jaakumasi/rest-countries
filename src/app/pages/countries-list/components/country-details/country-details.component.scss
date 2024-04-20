@@ -4,7 +4,11 @@
   width: 100%;
   height: 100%;
   background-color: #fff;
-  overflow: scroll;
+  overflow: hidden;
+
+  @media (max-width: $small-screen-max-width) {
+    overflow: scroll;
+  }
 
   &.dark {
     background-color: $dark-mode-body-bg;

@@ -19,8 +19,15 @@
     display: flex;
     justify-content: space-between;
     margin-top: 2rem;
-    width: 89%;
     margin: 2rem auto 0 auto;
+
+    @media (max-width: $extra-large-screen-max-width) {
+      width: 93.5%;
+    }
+
+    @media (max-width: $large-screen-max-width) {
+      width: 88%;
+    }
 
     @media (max-width: $medium-screen-max-width) {
       flex-direction: column;
@@ -39,20 +46,27 @@
 
     .search {
       position: relative;
-      width: 100%;
 
       input {
         padding: 1rem 1rem 1rem 4rem;
         box-sizing: border-box;
-        min-width: 100%;
         font-size: 1.1rem;
         border-width: 0;
         background-color: $light-mode-component-bg;
         box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
         border-radius: 5px;
 
+        @media (max-width: $extra-large-screen-max-width) {
+          min-width: 600px;
+        }
+
+        @media (max-width: $large-screen-max-width) {
+          min-width: 500px;
+        }
+
         @media (max-width: $medium-screen-max-width) {
           // margin-bottom: 2rem;
+          min-width: 100%;
         }
 
         &::placeholder {
@@ -86,16 +100,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      // padding: 1rem;
       color: $light-mode-primary-text-color;
       background-color: $light-mode-component-bg;
       box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
       border-radius: 5px;
       font-weight: bold;
+      padding: 1rem;
 
       @media (max-width: $medium-screen-max-width) {
         width: fit-content;
-        padding: 1rem 1.5rem;
+        // padding: 1rem 1.5rem;
       }
 
       // @media (max-width: $small-screen-max-width) {
@@ -112,7 +126,8 @@
       }
 
       .filter-label {
-        margin-right: 2rem;
+        width: fit-content;
+        margin: 0 2rem 0 1rem;
       }
 
       img {
