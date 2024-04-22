@@ -67,7 +67,7 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     this.onRequestStart();
 
     this.fetchCountries.getInitialCountriesList().subscribe({
-      next: (list) => {
+      next: (list) => {console.log(list)
         this.onRequestResolved(list);
       },
     });

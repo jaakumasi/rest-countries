@@ -19,7 +19,7 @@
       <img [src]="details.flags.svg" alt="" />
     </div>
     <div class="details">
-      <div class="country">{{ details.name.common }}</div>
+      <div class="country">{{ details.name.nativeName.common }}</div>
       <div class="details-group">
         <div
           class="details-group-1"
@@ -27,7 +27,7 @@
         >
           <div class="native-name">
             <span class="label">Native name: </span>
-            <span class="detail">{{details.name.nativeName}}</span>
+            <span class="detail">{{ nativeName }}</span>
           </div>
           <div class="population">
             <span class="label">Population: </span>
@@ -66,7 +66,6 @@
       </div>
 
       <app-border-countries [details]="details"></app-border-countries>
-
     </div>
   </div>
 </div>
