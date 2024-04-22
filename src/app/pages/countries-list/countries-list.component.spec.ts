@@ -65,7 +65,6 @@ describe('CountriesComponent', () => {
     expect(component.countries).toEqual(mockCountries);
   });
 
-  // Additional tests can be added here
 });
 
 // import {
