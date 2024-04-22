@@ -41,4 +41,4 @@ The webapp consists of a single page residing in:
 
 Shared files for the entire application reside in `app/shared`.
 
-Made with ♥ by PhenominalDev
+Made with ♥ by Dev-Phenominal
