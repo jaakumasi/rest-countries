@@ -11,8 +11,14 @@ import {
   signal,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, debounceTime, fromEvent } from 'rxjs';
-import { ERROR_MESSAGES } from '../../shared/constants';
+import {
+  Observable,
+  Subscription,
+  TimeoutInfo,
+  debounceTime,
+  fromEvent,
+} from 'rxjs';
+import { ERROR_MESSAGES, LOCAL_STORAGE_KEY } from '../../shared/constants';
 import { Country } from '../../shared/interfaces';
 import { FetchCountriesListService } from '../../shared/services/fetch-countries-list/fetch-countries-list.service';
 import { SharedState } from '../../shared/store/store.state';
@@ -48,7 +54,7 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     'Europe',
     'Oceania',
   ]);
-  isLoading = signal<boolean>(true);
+  isLoading = signal<boolean>(false);
   showErrorMsg = signal<boolean>(false);
   errorMsg = signal<string>(''); // timeout or empty list msg
   countries: Country[] = [];
@@ -64,13 +70,18 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     }, 15000);
 
   ngOnInit(): void {
-    this.onRequestStart();
+    this.loadSession();
+    // console.log(this.countries)
+    if (this.countries.length === 0) {
+      this.onRequestStart();
 
-    this.fetchCountries.getInitialCountriesList().subscribe({
-      next: (list) => {
-        this.onRequestResolved(list);
-      },
-    });
+      this.fetchCountries.getInitialCountriesList().subscribe({
+        next: (list) => {
+          console.log(list);
+          this.onRequestResolved(list);
+        },
+      });
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -100,11 +111,11 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     // }
   }
 
-  timeoutId: any;
-  handleInput(event: any) {
-    clearTimeout(this.timeoutId);
+  debounceTimeoutId: any;
+  handleInput(event: Event) {
+    clearTimeout(this.debounceTimeoutId);
 
-    this.timeoutId = setTimeout(() => {
+    this.debounceTimeoutId = setTimeout(() => {
       this.onRequestStart();
       const query = this.searchField.nativeElement.value;
       /* fetch initial countries list if the query is empty */
@@ -133,7 +144,6 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
 
   onFilterOption(filterOption: string) {
     this.onRequestStart();
-
     this.fetchCountries
       .getFilteredByRegionCountriesList(filterOption)
       .subscribe({
@@ -145,13 +155,14 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
 
   /* handles switching to selected country details mode */
   onCountryClick(countryIndex: number) {
-    // console.log(countryIndex);
     this.selectedCountryIndex.set(countryIndex);
     this.showSelectedCountryDetails.set(true);
+    this.saveSession(false, true, true);
   }
 
   onCloseDetailsView() {
     this.showSelectedCountryDetails.set(false);
+    this.saveSession(false, true, false);
   }
 
   onRequestStart() {
@@ -172,5 +183,44 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     }
     this.showErrorMsg.set(false);
     this.countries = list;
+
+    // if (this.searchField.nativeElement.value === '')
+    this.saveSession(list, false, false);
+  }
+
+  loadSession() {
+    const sessionList = localStorage.getItem(LOCAL_STORAGE_KEY.LIST);
+    const showDetails = localStorage.getItem(LOCAL_STORAGE_KEY.SHOW_DETAILS);
+    const selectedCountryIndex = localStorage.getItem(
+      LOCAL_STORAGE_KEY.SELECTED_COUNTRY_INDEX
+    );
+
+    if (sessionList) {
+      this.countries = JSON.parse(sessionList);
+      this.isLoading.set(false);
+    }
+    if (showDetails)
+      this.showSelectedCountryDetails.set(JSON.parse(showDetails));
+    if (selectedCountryIndex)
+      this.selectedCountryIndex.set(JSON.parse(selectedCountryIndex));
+  }
+
+  saveSession(
+    list: Country[] | boolean,
+    showDetails: boolean,
+    selectedCountryIndex: boolean
+  ) {
+    if (list && this.searchField.nativeElement.value === '')
+      localStorage.setItem(LOCAL_STORAGE_KEY.LIST, JSON.stringify(list));
+    if (showDetails)
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.SHOW_DETAILS,
+        JSON.stringify(this.showSelectedCountryDetails())
+      );
+    if (selectedCountryIndex)
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.SELECTED_COUNTRY_INDEX,
+        JSON.stringify(this.selectedCountryIndex())
+      );
   }
 }

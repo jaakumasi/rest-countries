@@ -19,3 +19,9 @@ export const ERROR_MESSAGES = {
   TIMEOUT: 'Request timed out ⏲ Please refresh ❗',
   NOT_FOUND: 'Sorry, no matching results found ❗',
 };
+
+export const LOCAL_STORAGE_KEY = {
+  LIST: 'list',
+  SELECTED_COUNTRY_INDEX: 'selected_country_index',
+  SHOW_DETAILS: 'show_details',
+};
