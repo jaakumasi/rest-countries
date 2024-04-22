@@ -1,18 +1,25 @@
-import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import {
+  TestBed,
+  fakeAsync,
+  flush,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from '@ngrx/store';
-import { MockProvider, MockRender, MockedComponentFixture } from 'ng-mocks';
+import {
+  MockBuilder,
+  MockProvider,
+  MockRender,
+  MockService,
+  MockedComponentFixture,
+  ngMocks,
+} from 'ng-mocks';
 import { of, throwError } from 'rxjs';
 import { FetchCountriesListService } from '../../shared/services/fetch-countries-list/fetch-countries-list.service';
 import { CountriesComponent } from './countries-list.component';
-
-const MockFetchCountriesListService = MockProvider(FetchCountriesListService, {
-  getCountryQueryList: () => throwError(() => new Error()),
-});
-
-const MockStore = MockProvider(Store, {
-  select: () => of({ isDarkMode: 'dark' }),
-});
+import { HttpClientModule } from '@angular/common/http';
+import { ERROR_MESSAGES } from '../../shared/constants';
 
 describe('CountriesComponent', () => {
   let fixture: MockedComponentFixture<CountriesComponent>;
@@ -20,33 +27,35 @@ describe('CountriesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CountriesComponent],
-      providers: [MockFetchCountriesListService, MockStore],
+      imports: [CountriesComponent, HttpClientTestingModule],
+      providers: [
+        MockProvider(FetchCountriesListService, {
+          getCountryQueryList: () => throwError(() => new Error()),
+          getInitialCountriesList: () => of([]),
+        }),
+        MockProvider(Store, {
+          select: () => of({ isDarkMode: 'dark' }),
+        }),
+      ],
     }).compileComponents();
 
     fixture = MockRender(CountriesComponent);
-    component = fixture.point.componentInstance;
+    component = fixture.componentInstance;
+    TestBed.inject(Store);
+    TestBed.inject(FetchCountriesListService);
+    fixture.detectChanges();
   });
 
   it('SHOULD create the COUNTRIES COMPONENT', () => {
     expect(component).toBeDefined();
   });
 
-  it('SHOULD show error message when the search query observable fails (throws error)', async () => {
-    const searchField_input = fixture.debugElement.query(By.css('input'));
-    // const spy = jest.spyOn(component, 'onSearchQueryChange');
-    searchField_input.triggerEventHandler('input', {
-      target: component.searchField//searchField_input.nativeElement,
-    });
-    searchField_input.nativeElement.value = 'gibberish';
-
-    // expect(spy).toHaveBeenCalledTimes(1);
-
-    // console.log(searchField_input);
-
+  it('SHOULD show error message when the search query observable throws an error', waitForAsync(async () => {
+    component.searchField.nativeElement.value = 'gibberish';
+    fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component.showErrorMsg()).toBe(true);
-  });
+    expect(component.errorMsg()).toEqual(ERROR_MESSAGES.NOT_FOUND);
+  }));
 });

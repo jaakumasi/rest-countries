@@ -82,8 +82,6 @@ export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
         .pipe(debounceTime(1000))
         .subscribe(() => {
           this.onRequestStart();
-          console.log('subscription run-----------------------'); 
-
           const query = this.searchField.nativeElement.value;
           /* fetch initial countries list if the query is empty */
           if (query === '') {
@@ -93,10 +91,7 @@ export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
           } else {
             this.fetchCountries.getCountryQueryList(query).subscribe({
               next: (matches) => this.onRequestResolved(matches),
-              error: () => {
-                console.log('error-------------------------------');
-                this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND);
-              },
+              error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
             });
           }
         });
@@ -134,8 +129,6 @@ export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   onCloseDetailsView() {
     this.showSelectedCountryDetails.set(false);
-    // this.ngAfterViewInit();
-    // this.cdRef.markForCheck();
   }
 
   onRequestStart() {
