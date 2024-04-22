@@ -4,6 +4,11 @@
   width: 100%;
   height: 85%;
 
+  @media (max-width: $small-screen-max-width) {
+    width: 80%;
+    margin: 0 auto;
+  }
+
   &:hover {
     cursor: pointer;
   }
@@ -20,6 +25,8 @@
 
   .details-container {
     background-color: $light-mode-component-bg;
+    transition-property: background-color;
+    transition: 200ms linear;
     padding: 0.8rem 1rem;
     height: 50%;
     border-radius: 0 0 5px 5px;

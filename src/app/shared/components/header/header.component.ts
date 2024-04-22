@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
-  OnInit,
-  effect,
-  inject,
+  inject
 } from '@angular/core';
-import { SharedState } from '../../store/store.state';
-import { toggleThemeAction } from '../../store/store.actions';
-import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { toggleThemeAction } from '../../store/store.actions';
+import { SharedState } from '../../store/store.state';
 
 @Component({
   selector: 'app-header',

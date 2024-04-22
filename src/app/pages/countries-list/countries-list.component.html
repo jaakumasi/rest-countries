@@ -1,4 +1,7 @@
-<div class="countries-page" [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }">
+<div
+  class="countries-page"
+  [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
+>
   <!--show search & filter when NOT displaying a particular country's details-->
   <div
     *ngIf="showSelectedCountryDetails(); then countryDetails; else countryList"
@@ -9,6 +12,7 @@
       <div class="search">
         <input
           #searchField
+          (input)="handleInput($event)"
           type="text"
           placeholder="search for a country"
           [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
@@ -17,16 +21,16 @@
         <ng-template [ngIf]="(state$ | async)?.isDarkTheme === 'false'">
           <img
             src="/assets/images/search-icon-light.svg"
-            alt=""
             class="search-icon"
+            alt=""
           />
         </ng-template>
         <!--dark mode search icon-->
         <ng-template [ngIf]="(state$ | async)?.isDarkTheme === 'true'">
           <img
             src="/assets/images/search-icon-dark.svg"
-            alt=""
             class="search-icon"
+            alt=""
           />
         </ng-template>
       </div>
@@ -72,8 +76,8 @@
     </div>
 
     <ng-template [ngIf]="isLoading()">
-      <div class="loading-gif">
-        <img src="/assets/images/loading.gif" class="loading-gif" />
+      <div class="loading-gif-container">
+        <img src="/assets/images/loading.gif" class="loading-gif"/>
       </div>
     </ng-template>
     <ng-template [ngIf]="showErrorMsg()">

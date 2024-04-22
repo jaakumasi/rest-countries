@@ -21,17 +21,13 @@ import { BorderCountriesComponent } from './border-countries/border-countries.co
   templateUrl: './country-details.component.html',
   styleUrl: './country-details.component.scss',
 })
-export class CountryDetailsComponent implements AfterViewInit, OnInit {
+export class CountryDetailsComponent implements OnInit {
   state$ = inject(Store).select('toggleThemeReducer');
 
   @Input() details!: Country;
   @Output() closeDetailsViewEvent = new EventEmitter<null>();
   currencies!: string;
   languages!: string;
-
-  ngAfterViewInit(): void {
-    console.log(this.details);
-  }
 
   ngOnInit(): void {
     const currencyCodes = Object.keys(this.details.currencies);

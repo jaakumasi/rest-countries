@@ -32,7 +32,7 @@ import { CountryComponent } from './components/country/country.component';
   styleUrl: './countries-list.component.scss',
   providers: [FetchCountriesListService],
 })
-export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class CountriesComponent implements OnInit, AfterViewChecked {
   @ViewChild('searchField') searchField!: ElementRef;
   searchFieldSubscription?: Subscription;
 
@@ -61,7 +61,7 @@ export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.errorMsg.set(ERROR_MESSAGES.TIMEOUT);
         this.showErrorMsg.set(true);
       }
-    }, 5000);
+    }, 15000);
 
   ngOnInit(): void {
     this.onRequestStart();
@@ -74,33 +74,56 @@ export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    if (!this.searchFieldSubscription) {
-      this.searchFieldSubscription = fromEvent(
-        this.searchField.nativeElement,
-        'input'
-      )
-        .pipe(debounceTime(1000))
-        .subscribe(() => {
-          this.onRequestStart();
-          const query = this.searchField.nativeElement.value;
-          /* fetch initial countries list if the query is empty */
-          if (query === '') {
-            this.fetchCountries
-              .getInitialCountriesList()
-              .subscribe((list) => this.onRequestResolved(list));
-          } else {
-            this.fetchCountries.getCountryQueryList(query).subscribe({
-              next: (matches) => this.onRequestResolved(matches),
-              error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
-            });
-          }
-        });
-    }
+    // console.log('changed')
+    // console.log('sub: ', this.searchFieldSubscription);
+    // if (!this.searchFieldSubscription) {
+    // this.searchFieldSubscription = fromEvent(
+    //   this.searchField?.nativeElement,
+    //   'input'
+    // )
+    //   .pipe(debounceTime(1000))
+    //   .subscribe(() => {
+    //     this.onRequestStart();
+    //     const query = this.searchField.nativeElement.value;
+    //     /* fetch initial countries list if the query is empty */
+    //     if (query === '') {
+    //       this.fetchCountries
+    //         .getInitialCountriesList()
+    //         .subscribe((list) => this.onRequestResolved(list));
+    //     } else {
+    //       this.fetchCountries.getCountryQueryList(query).subscribe({
+    //         next: (matches) => this.onRequestResolved(matches as Country[]),
+    //         error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
+    //       });
+    //     }
+    //   });
+    // }
   }
 
-  ngOnDestroy(): void {
-    this.searchFieldSubscription?.unsubscribe();
+  timeoutId: any;
+  handleInput(event: any) {
+    clearTimeout(this.timeoutId);
+
+    this.timeoutId = setTimeout(() => {
+      this.onRequestStart();
+      const query = this.searchField.nativeElement.value;
+      /* fetch initial countries list if the query is empty */
+      if (query === '') {
+        this.fetchCountries
+          .getInitialCountriesList()
+          .subscribe((list) => this.onRequestResolved(list));
+      } else {
+        this.fetchCountries.getCountryQueryList(query).subscribe({
+          next: (matches) => this.onRequestResolved(matches as Country[]),
+          error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
+        });
+      }
+    }, 1000);
   }
+
+  // ngOnDestroy(): void {
+  //   this.searchFieldSubscription?.unsubscribe();
+  // }
 
   onShowfilterByRegionOptions() {
     this.showfilterByRegionOptions()
@@ -115,7 +138,7 @@ export class CountriesComponent implements OnInit, OnDestroy, AfterViewChecked {
       .getFilteredByRegionCountriesList(filterOption)
       .subscribe({
         next: (list) => {
-          this.onRequestResolved(list);
+          this.onRequestResolved(list as Country[]);
         },
       });
   }

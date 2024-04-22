@@ -7,6 +7,8 @@
   justify-content: space-between;
   box-shadow: 0 1px 6px rgba(79, 79, 79, 0.25);
   background-color: $light-mode-component-bg;
+  transition-property: background-color;
+  transition: 200ms linear;
 
   &.dark {
     color: $dark-mode-primary-text-color;
@@ -29,18 +31,24 @@
     align-items: center;
     margin-right: 5rem;
 
+    .theme-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-right: 10px;
+      transform: rotate(0deg);
+      transition:transform 200ms ease-in-out;
+
+      &.active {
+        transform: rotate(360deg);
+      }
+    }
+
     @media (max-width: $small-screen-max-width) {
       margin-right: 1rem;
     }
 
     &:hover {
       cursor: pointer;
-    }
-
-    .theme-icon {
-      width: 1.2rem;
-      height: 1.2rem;
-      margin-right: 10px;
     }
 
     .theme-label {

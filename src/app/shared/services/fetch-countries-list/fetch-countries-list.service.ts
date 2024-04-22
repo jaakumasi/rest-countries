@@ -46,15 +46,13 @@ export class FetchCountriesListService {
     );
   }
 
-  getFilteredByRegionCountriesList(region: string): Observable<Country[]> {
-    // @ts-ignore
+  getFilteredByRegionCountriesList(region: string): Observable<Object> {
     return this.http.get(
       `${REST_COUNTRIES_API}/region/${region}?fields=${this.filteredResponseFieldsString}`
     );
   }
 
-  getCountryQueryList(query: string): Observable<Country[]> {
-    //@ts-ignore
+  getCountryQueryList(query: string): Observable<Object> {
     return this.http.get(
       `${REST_COUNTRIES_API}/name/${query}?fields=${this.filteredResponseFieldsString}`
     );

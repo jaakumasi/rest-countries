@@ -4,6 +4,8 @@
   width: 100%;
   height: 100%;
   background-color: #fff;
+  transition-property: background-color;
+  transition: 200ms linear;
   overflow: hidden;
 
   @media (max-width: $small-screen-max-width) {
