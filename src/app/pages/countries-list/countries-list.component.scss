@@ -222,9 +222,23 @@
 
   .countries-list-container {
     margin-top: 2rem;
-    height: 80%;
+    height: 90%;
     overflow-y: auto;
     transition: transform 250ms linear;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: $dark-mode-component-bg;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(113, 113, 113);
+      border-radius: 10px;
+    }
 
     &.hidden {
       transform: translateY(-100px);

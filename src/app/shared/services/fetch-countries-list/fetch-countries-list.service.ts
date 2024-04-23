@@ -57,7 +57,6 @@ export class FetchCountriesListService {
   }
 
   getBorderCountryDetails(borderCountryCode: string): Observable<Object> {
-    console.log('service')
     return this.http.get(
       `${REST_COUNTRIES_API}/alpha/${borderCountryCode}?fields=${this.filteredResponseFieldsString}`
     );
