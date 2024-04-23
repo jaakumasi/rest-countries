@@ -8,7 +8,7 @@
   ></div>
 
   <ng-template #countryList>
-    <div class="search-and-filter">
+    <div class="search-and-filter" [ngClass]="{ hidden: isScrollingDown() }">
       <div class="search">
         <input
           #searchField
@@ -91,7 +91,11 @@
       </div>
     </ng-template>
     <ng-template [ngIf]="!isLoading() && !showErrorMsg()">
-      <div class="countries-list-container">
+      <div
+        class="countries-list-container"
+        [ngClass]="{ hidden: isScrollingDown() }"
+        (scroll)="onScroll($event)"
+      >
         <div class="countries-list">
           @for (country of countries; track $index) {
           <app-country
@@ -109,7 +113,9 @@
     <app-country-details
       [details]="selectedCountryDetails()"
       (closeDetailsViewEvent)="onCloseDetailsView()"
-      (updateSelectedCountryDetailsEvent)="onUpdateSelectedCountryDetails($event)"
+      (updateSelectedCountryDetailsEvent)="
+        onUpdateSelectedCountryDetails($event)
+      "
     ></app-country-details>
   </ng-template>
 </div>

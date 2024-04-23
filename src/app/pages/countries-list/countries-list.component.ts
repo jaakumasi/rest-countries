@@ -4,9 +4,11 @@ import {
   AfterViewChecked,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   ViewChild,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -60,6 +62,18 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
   countries: Country[] = [];
   selectedCountryIndex = signal<number>(0);
   selectedCountryDetails = signal<Country | undefined>(undefined);
+  isScrollingDown = signal<boolean>(false);
+
+  previousScrollPosition = 0;
+  onScroll(event: Event) {
+    // @ts-ignore
+    const currentScrollPosition = event.target.scrollTop;
+    if (currentScrollPosition > this.previousScrollPosition)
+      this.isScrollingDown.set(true);
+    else this.isScrollingDown.set(false);
+
+    this.previousScrollPosition = currentScrollPosition;
+  }
 
   requestTimeout = () =>
     setTimeout(() => {

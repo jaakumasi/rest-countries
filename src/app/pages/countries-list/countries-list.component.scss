@@ -22,6 +22,11 @@
     justify-content: space-between;
     margin-top: 2rem;
     margin: 2rem auto 0 auto;
+    transition: all 350ms linear;
+
+    &.hidden {
+      transform: translateY(-100px);
+    }
 
     @media (max-width: $extra-large-screen-max-width) {
       width: 93.5%;
@@ -110,12 +115,7 @@
 
       @media (max-width: $medium-screen-max-width) {
         width: fit-content;
-        // padding: 1rem 1.5rem;
       }
-
-      // @media (max-width: $small-screen-max-width) {
-      //   margin: 0 1rem 1rem 1rem;
-      // }
 
       &:hover {
         cursor: pointer;
@@ -220,6 +220,11 @@
     margin-top: 2rem;
     height: 80%;
     overflow-y: auto;
+    transition: transform 350ms linear;
+
+    &.hidden {
+      transform: translateY(-100px);
+    }
 
     @media (max-width: $extra-large-screen-max-width) {
     }
@@ -232,7 +237,6 @@
       height: auto;
       margin: 0 5rem 5rem 5rem;
       display: grid;
-
       padding-bottom: 80px;
 
       @media (max-width: $extra-large-screen-max-width) {
