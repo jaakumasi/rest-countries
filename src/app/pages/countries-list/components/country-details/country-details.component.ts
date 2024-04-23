@@ -28,30 +28,47 @@ export class CountryDetailsComponent implements OnInit {
   @Input() details?: Country;
   @Output() closeDetailsViewEvent = new EventEmitter<null>();
   @Output() updateSelectedCountryDetailsEvent = new EventEmitter<Country>();
+  flag!: string;
+  countryName!: string;
   currencies!: string;
   languages!: string;
   nativeName!: string;
+  population!: number;
+  region!: string;
+  subregion!: string;
+  capital!: string;
+  topLevelDomain!: string;
   isLoading = signal<boolean>(false);
+  detailsStack: Country[] = [];
+
+  onStackInit() {
+    this.detailsStack.push(this.details!);
+  }
 
   ngOnInit(): void {
+    this.onStackInit();
     this.onInit();
+    console.log('stack: ', this.detailsStack);
   }
 
   onInit() {
+    /* get the top details obj from the stack */
+    const detailsObj = this.detailsStack[this.detailsStack.length - 1];
+
     /* currencies */
-    const currencyCodes = Object.keys(this.details!.currencies);
+    const currencyCodes = Object.keys(detailsObj.currencies);
     const currencyList = currencyCodes.map((currencyCode) => {
       // @ts-ignore
-      return this.details.currencies[currencyCode].name;
+      return detailsObj.currencies[currencyCode].name;
     });
     this.currencies = currencyList.join(', ');
 
     /* languages */
-    const languages = Object.values(this.details!.languages);
+    const languages = Object.values(detailsObj.languages);
     this.languages = languages.join(', ');
 
     /* native name */
-    const nativeNames = Object.keys(this.details!.name.nativeName);
+    const nativeNames = Object.keys(detailsObj.name.nativeName);
     let nativeNameCode = '';
     for (let i = 0; i < nativeNames.length; i++) {
       nativeNameCode = knownNativeNames.find(
@@ -61,7 +78,21 @@ export class CountryDetailsComponent implements OnInit {
     }
 
     this.nativeName =
-      this.details!.name.nativeName[nativeNameCode].common ?? 'None';
+    detailsObj.name.nativeName[nativeNameCode].common ?? 'None';
+    
+    /* other straightforward details */
+    this.countryName = detailsObj.name.common;
+    this.flag = detailsObj.flags.svg!;
+    this.population = detailsObj.population;
+    this.region = detailsObj.region;
+    this.subregion = detailsObj.subregion;
+    this.capital = detailsObj.capital;
+    this.topLevelDomain = detailsObj.tld;
+  }
+
+  onPushDetails(details: Country) {
+    this.detailsStack.push(details);
+    console.log('stack: ', this.detailsStack);
   }
 
   onUpdateDetails(borderCountry: string) {
@@ -70,14 +101,24 @@ export class CountryDetailsComponent implements OnInit {
       next: (details: Object) => {
         this.details = details as Country;
         this.isLoading.set(false);
+        /* push selected border country to top of details stack */
+        this.onPushDetails(details as Country);
+        /* update the details with the details object at teh top of the stack */
         this.onInit();
         this.updateSelectedCountryDetailsEvent.emit(details as Country);
       },
     });
   }
 
-  onHideSelectedCountryDetails() {
-    this.closeDetailsViewEvent.emit();
+  /* 
+    keep popping details stack when the back button is clicked
+    until down to one element, then return to countires list view
+  */
+  onPopDetails() {
+    if (this.detailsStack.length > 1) {
+      this.detailsStack.pop();
+      this.onInit();
+    } else this.closeDetailsViewEvent.emit();
   }
 
   saveSession() {}

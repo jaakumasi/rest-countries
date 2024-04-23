@@ -170,7 +170,6 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
   }
 
   onUpdateSelectedCountryDetails(selectedCountry: Country) {
-    console.log('update');
     this.selectedCountryDetails.set(selectedCountry);
     this.saveSession(false, false, true);
   }
