@@ -22,10 +22,14 @@
     justify-content: space-between;
     margin-top: 2rem;
     margin: 2rem auto 0 auto;
-    transition: all 350ms linear;
+    transition: all 250ms linear;
 
     &.hidden {
       transform: translateY(-100px);
+
+      @media (max-width: $medium-screen-max-width) {
+        transform: translateY(-250px);
+      }
     }
 
     @media (max-width: $extra-large-screen-max-width) {
@@ -220,10 +224,14 @@
     margin-top: 2rem;
     height: 80%;
     overflow-y: auto;
-    transition: transform 350ms linear;
+    transition: transform 250ms linear;
 
     &.hidden {
       transform: translateY(-100px);
+
+      @media (max-width: $medium-screen-max-width) {
+        transform: translateY(-200px);
+      }
     }
 
     @media (max-width: $extra-large-screen-max-width) {
