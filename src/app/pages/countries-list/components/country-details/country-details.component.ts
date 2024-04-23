@@ -34,6 +34,10 @@ export class CountryDetailsComponent implements OnInit {
   isLoading = signal<boolean>(false);
 
   ngOnInit(): void {
+    this.onInit();
+  }
+
+  onInit() {
     /* currencies */
     const currencyCodes = Object.keys(this.details!.currencies);
     const currencyList = currencyCodes.map((currencyCode) => {
@@ -66,7 +70,7 @@ export class CountryDetailsComponent implements OnInit {
       next: (details: Object) => {
         this.details = details as Country;
         this.isLoading.set(false);
-        console.log('details: ', details)
+        this.onInit();
         this.updateSelectedCountryDetailsEvent.emit(details as Country);
       },
     });
