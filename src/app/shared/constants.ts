@@ -22,6 +22,6 @@ export const ERROR_MESSAGES = {
 
 export const LOCAL_STORAGE_KEY = {
   LIST: 'list',
-  SELECTED_COUNTRY_INDEX: 'selected_country_index',
+  SELECTED_COUNTRY_DETAILS: 'selected_country_details',
   SHOW_DETAILS: 'show_details',
 };

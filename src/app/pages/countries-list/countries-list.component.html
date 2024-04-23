@@ -77,7 +77,7 @@
 
     <ng-template [ngIf]="isLoading()">
       <div class="loading-gif-container">
-        <img src="/assets/images/loading.gif" class="loading-gif"/>
+        <img src="/assets/images/loading.gif" class="loading-gif" />
       </div>
     </ng-template>
     <ng-template [ngIf]="showErrorMsg()">
@@ -107,8 +107,9 @@
 
   <ng-template #countryDetails>
     <app-country-details
-      [details]="countries[selectedCountryIndex()]"
+      [details]="selectedCountryDetails()"
       (closeDetailsViewEvent)="onCloseDetailsView()"
+      (updateSelectedCountryDetailsEvent)="onUpdateSelectedCountryDetails($event)"
     ></app-country-details>
   </ng-template>
 </div>

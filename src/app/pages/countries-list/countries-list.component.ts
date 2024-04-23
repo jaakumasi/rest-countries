@@ -59,6 +59,7 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
   errorMsg = signal<string>(''); // timeout or empty list msg
   countries: Country[] = [];
   selectedCountryIndex = signal<number>(0);
+  selectedCountryDetails = signal<Country | undefined>(undefined);
 
   requestTimeout = () =>
     setTimeout(() => {
@@ -153,9 +154,12 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
       });
   }
 
-  /* handles switching to selected country details mode */
+  /* handles switching to selected country details view */
   onCountryClick(countryIndex: number) {
     this.selectedCountryIndex.set(countryIndex);
+    this.selectedCountryDetails.set(
+      this.countries[this.selectedCountryIndex()]
+    );
     this.showSelectedCountryDetails.set(true);
     this.saveSession(false, true, true);
   }
@@ -163,6 +167,12 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
   onCloseDetailsView() {
     this.showSelectedCountryDetails.set(false);
     this.saveSession(false, true, false);
+  }
+
+  onUpdateSelectedCountryDetails(selectedCountry: Country) {
+    console.log('update');
+    this.selectedCountryDetails.set(selectedCountry);
+    this.saveSession(false, false, true);
   }
 
   onRequestStart() {
@@ -184,31 +194,35 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     this.showErrorMsg.set(false);
     this.countries = list;
 
-    // if (this.searchField.nativeElement.value === '')
     this.saveSession(list, false, false);
   }
 
   loadSession() {
     const sessionList = localStorage.getItem(LOCAL_STORAGE_KEY.LIST);
     const showDetails = localStorage.getItem(LOCAL_STORAGE_KEY.SHOW_DETAILS);
-    const selectedCountryIndex = localStorage.getItem(
-      LOCAL_STORAGE_KEY.SELECTED_COUNTRY_INDEX
+    const selectedCountryDetails = localStorage.getItem(
+      LOCAL_STORAGE_KEY.SELECTED_COUNTRY_DETAILS
     );
 
     if (sessionList) {
       this.countries = JSON.parse(sessionList);
       this.isLoading.set(false);
     }
-    if (showDetails)
+    if (selectedCountryDetails)
+      this.selectedCountryDetails.set(JSON.parse(selectedCountryDetails));
+    if (showDetails && selectedCountryDetails)
       this.showSelectedCountryDetails.set(JSON.parse(showDetails));
-    if (selectedCountryIndex)
-      this.selectedCountryIndex.set(JSON.parse(selectedCountryIndex));
   }
 
+  /* 
+    handles all session saves:
+        - countries list | details view state | selected country details.
+    which session data gets saved depends on the boolean vals passed
+  */
   saveSession(
     list: Country[] | boolean,
     showDetails: boolean,
-    selectedCountryIndex: boolean
+    selectedCountryDetails: boolean
   ) {
     if (list && this.searchField.nativeElement.value === '')
       localStorage.setItem(LOCAL_STORAGE_KEY.LIST, JSON.stringify(list));
@@ -217,10 +231,17 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
         LOCAL_STORAGE_KEY.SHOW_DETAILS,
         JSON.stringify(this.showSelectedCountryDetails())
       );
-    if (selectedCountryIndex)
+    if (selectedCountryDetails) {
+      console.log('selected details: ', this.selectedCountryDetails());
       localStorage.setItem(
-        LOCAL_STORAGE_KEY.SELECTED_COUNTRY_INDEX,
-        JSON.stringify(this.selectedCountryIndex())
+        LOCAL_STORAGE_KEY.SELECTED_COUNTRY_DETAILS,
+        JSON.stringify(this.selectedCountryDetails())
       );
+    }
+    // if (typeof selectedCountryIndex === 'boolean')
+    //   localStorage.setItem(
+    //     LOCAL_STORAGE_KEY.SELECTED_COUNTRY_INDEX,
+    //     JSON.stringify(this.selectedCountryIndex())
+    //   );
   }
 }
