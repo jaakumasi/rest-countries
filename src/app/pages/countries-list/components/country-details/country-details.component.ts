@@ -6,10 +6,12 @@ import {
   OnInit,
   Output,
   inject,
+  signal,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Country } from '../../../../shared/interfaces';
 import { BorderCountriesComponent } from './border-countries/border-countries.component';
+import { FetchCountriesListService } from '../../../../shared/services/fetch-countries-list/fetch-countries-list.service';
 
 @Component({
   selector: 'app-country-details',
@@ -17,19 +19,23 @@ import { BorderCountriesComponent } from './border-countries/border-countries.co
   imports: [CommonModule, BorderCountriesComponent],
   templateUrl: './country-details.component.html',
   styleUrl: './country-details.component.scss',
+  providers: [FetchCountriesListService],
 })
 export class CountryDetailsComponent implements OnInit {
   state$ = inject(Store).select('toggleThemeReducer');
+  fetchCountries = inject(FetchCountriesListService);
 
-  @Input() details!: Country;
+  @Input() details?: Country;
   @Output() closeDetailsViewEvent = new EventEmitter<null>();
+  @Output() updateSelectedCountryDetailsEvent = new EventEmitter<Country>();
   currencies!: string;
   languages!: string;
   nativeName!: string;
+  isLoading = signal<boolean>(false);
 
   ngOnInit(): void {
     /* currencies */
-    const currencyCodes = Object.keys(this.details.currencies);
+    const currencyCodes = Object.keys(this.details!.currencies);
     const currencyList = currencyCodes.map((currencyCode) => {
       // @ts-ignore
       return this.details.currencies[currencyCode].name;
@@ -37,11 +43,11 @@ export class CountryDetailsComponent implements OnInit {
     this.currencies = currencyList.join(', ');
 
     /* languages */
-    const languages = Object.values(this.details.languages);
+    const languages = Object.values(this.details!.languages);
     this.languages = languages.join(', ');
 
     /* native name */
-    const nativeNames = Object.keys(this.details.name.nativeName);
+    const nativeNames = Object.keys(this.details!.name.nativeName);
     let nativeNameCode = '';
     for (let i = 0; i < nativeNames.length; i++) {
       nativeNameCode = knownNativeNames.find(
@@ -50,14 +56,27 @@ export class CountryDetailsComponent implements OnInit {
       if (nativeNameCode) break;
     }
 
-    console.log(this.details.name.nativeName);
     this.nativeName =
-      this.details.name.nativeName[nativeNameCode].common ?? 'None';
+      this.details!.name.nativeName[nativeNameCode].common ?? 'None';
+  }
+
+  onUpdateDetails(borderCountry: string) {
+    this.isLoading.set(true);
+    this.fetchCountries.getBorderCountryDetails(borderCountry).subscribe({
+      next: (details: Object) => {
+        this.details = details as Country;
+        this.isLoading.set(false);
+        console.log('details: ', details)
+        this.updateSelectedCountryDetailsEvent.emit(details as Country);
+      },
+    });
   }
 
   onHideSelectedCountryDetails() {
     this.closeDetailsViewEvent.emit();
   }
+
+  saveSession() {}
 }
 
 const knownNativeNames = [

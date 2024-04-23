@@ -9,9 +9,7 @@ import { FilterResponseFieldsService } from '../filter-response-fields/filter-re
   providedIn: 'root',
 })
 export class FetchCountriesListService {
-  // http = inject(HttpClient);
-
-  constructor(private http: HttpClient){}
+  http = inject(HttpClient);
 
   filteredResponseFieldsString = inject(
     FilterResponseFieldsService
@@ -55,6 +53,13 @@ export class FetchCountriesListService {
   getCountryQueryList(query: string): Observable<Object> {
     return this.http.get(
       `${REST_COUNTRIES_API}/name/${query}?fields=${this.filteredResponseFieldsString}`
+    );
+  }
+
+  getBorderCountryDetails(borderCountryCode: string): Observable<Object> {
+    console.log('service')
+    return this.http.get(
+      `${REST_COUNTRIES_API}/alpha/${borderCountryCode}?fields=${this.filteredResponseFieldsString}`
     );
   }
 }

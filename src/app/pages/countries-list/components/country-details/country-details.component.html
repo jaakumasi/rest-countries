@@ -2,6 +2,13 @@
   class="country-details"
   [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
 >
+  <!--loading gif-->
+  @if(isLoading()) {
+  <div class="loading-gif-container">
+    <img src="/assets/images/loading.gif" class="loading-gif" />
+  </div>
+  }
+
   <div
     class="back"
     [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
@@ -16,10 +23,10 @@
   </div>
   <div class="main">
     <div class="flag">
-      <img [src]="details.flags.svg" alt="" />
+      <img [src]="details!.flags.svg" alt="" />
     </div>
     <div class="details">
-      <div class="country">{{ details.name.nativeName.common }}</div>
+      <div class="country">{{ details!.name.nativeName.common }}</div>
       <div class="details-group">
         <div
           class="details-group-1"
@@ -31,19 +38,19 @@
           </div>
           <div class="population">
             <span class="label">Population: </span>
-            <span class="detail">{{ details.population | number }}</span>
+            <span class="detail">{{ details!.population | number }}</span>
           </div>
           <div class="region">
             <span class="label">Region </span>
-            <span class="detail">{{ details.region }}</span>
+            <span class="detail">{{ details!.region }}</span>
           </div>
           <div class="sub-region">
             <span class="label">Sub Region: </span>
-            <span class="detail">{{ details.subregion }}</span>
+            <span class="detail">{{ details!.subregion }}</span>
           </div>
           <div class="capital">
             <span class="label">Capital: </span>
-            <span class="detail">{{ details.capital }}</span>
+            <span class="detail">{{ details!.capital }}</span>
           </div>
         </div>
         <div
@@ -52,7 +59,7 @@
         >
           <div class="top-level-domain">
             <span class="label">Top Level Domain: </span>
-            <span class="detail">{{ details.tld }}</span>
+            <span class="detail">{{ details!.tld }}</span>
           </div>
           <div class="currencies">
             <span class="label">Currencies: </span>
@@ -65,7 +72,10 @@
         </div>
       </div>
 
-      <app-border-countries [details]="details"></app-border-countries>
+      <app-border-countries
+        [details]="details!"
+        (emitBorderCountryCode)="onUpdateDetails($event)"
+      ></app-border-countries>
     </div>
   </div>
 </div>

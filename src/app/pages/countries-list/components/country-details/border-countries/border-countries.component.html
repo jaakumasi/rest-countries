@@ -11,10 +11,11 @@
     } @else { @for (borderCountry of details.borders; track $index) {
     <div
       class="border-country"
+      (click)="onBorderCountry(borderCountry)"
       [ngClass]="{ dark: (state$ | async)?.isDarkTheme === 'true' }"
-    >
+      >
       {{ borderCountry }}
     </div>
-    } }
-  </div>
+  } }
+</div>
 </div>

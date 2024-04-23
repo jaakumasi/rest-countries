@@ -1,12 +1,31 @@
 @import "../../../../shared/styles/variables";
 
 .country-details {
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: #fff;
   transition-property: background-color;
   transition: 200ms linear;
   overflow: hidden;
+
+  .loading-gif-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #5959595a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+
+    .loading-gif {
+      width: 6rem;
+      height: 6rem;
+    }
+  }
 
   @media (max-width: $small-screen-max-width) {
     overflow: scroll;
@@ -44,7 +63,7 @@
 
   .main {
     margin: 0 5rem;
-    // height: 60%;
+    height: 60%;
     display: flex;
     justify-content: space-between;
 
