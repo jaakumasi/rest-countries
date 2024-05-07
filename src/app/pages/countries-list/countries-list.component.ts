@@ -141,7 +141,7 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
           error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
         });
       }
-    }, 1000);
+    }, 500);
   }
 
   // ngOnDestroy(): void {
