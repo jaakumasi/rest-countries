@@ -22,10 +22,14 @@
     justify-content: space-between;
     margin-top: 2rem;
     margin: 2rem auto 0 auto;
-    transition: all 350ms linear;
+    transition: all 250ms linear;
 
     &.hidden {
       transform: translateY(-100px);
+
+      @media (max-width: $medium-screen-max-width) {
+        transform: translateY(-250px);
+      }
     }
 
     @media (max-width: $extra-large-screen-max-width) {
@@ -218,12 +222,30 @@
 
   .countries-list-container {
     margin-top: 2rem;
-    height: 80%;
+    height: 90%;
     overflow-y: auto;
-    transition: transform 350ms linear;
+    transition: transform 250ms linear;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: $dark-mode-component-bg;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(113, 113, 113);
+      border-radius: 10px;
+    }
 
     &.hidden {
       transform: translateY(-100px);
+
+      @media (max-width: $medium-screen-max-width) {
+        transform: translateY(-200px);
+      }
     }
 
     @media (max-width: $extra-large-screen-max-width) {

@@ -86,13 +86,11 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.loadSession();
-    // console.log(this.countries)
     if (this.countries.length === 0) {
       this.onRequestStart();
 
       this.fetchCountries.getInitialCountriesList().subscribe({
         next: (list) => {
-          console.log(list);
           this.onRequestResolved(list);
         },
       });
@@ -100,7 +98,6 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    // console.log('changed')
     // console.log('sub: ', this.searchFieldSubscription);
     // if (!this.searchFieldSubscription) {
     // this.searchFieldSubscription = fromEvent(
@@ -144,7 +141,7 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
           error: () => this.onRequestResolved([], ERROR_MESSAGES.NOT_FOUND),
         });
       }
-    }, 1000);
+    }, 500);
   }
 
   // ngOnDestroy(): void {
@@ -245,16 +242,10 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
         JSON.stringify(this.showSelectedCountryDetails())
       );
     if (selectedCountryDetails) {
-      console.log('selected details: ', this.selectedCountryDetails());
       localStorage.setItem(
         LOCAL_STORAGE_KEY.SELECTED_COUNTRY_DETAILS,
         JSON.stringify(this.selectedCountryDetails())
       );
     }
-    // if (typeof selectedCountryIndex === 'boolean')
-    //   localStorage.setItem(
-    //     LOCAL_STORAGE_KEY.SELECTED_COUNTRY_INDEX,
-    //     JSON.stringify(this.selectedCountryIndex())
-    //   );
   }
 }

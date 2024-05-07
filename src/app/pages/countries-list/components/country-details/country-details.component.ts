@@ -48,7 +48,6 @@ export class CountryDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.onStackInit();
     this.onInit();
-    console.log('stack: ', this.detailsStack);
   }
 
   onInit() {
@@ -92,7 +91,6 @@ export class CountryDetailsComponent implements OnInit {
 
   onPushDetails(details: Country) {
     this.detailsStack.push(details);
-    console.log('stack: ', this.detailsStack);
   }
 
   onUpdateDetails(borderCountry: string) {
