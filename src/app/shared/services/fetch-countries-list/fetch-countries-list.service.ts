@@ -27,21 +27,25 @@ export class FetchCountriesListService {
   ];
 
   getInitialCountriesList(): Observable<Country[]> {
-    const requests: Observable<any>[] = this.initialCountries.map((country) =>
-      this.http.get(
-        `${REST_COUNTRIES_API}/name/${country}?fields=${this.filteredResponseFieldsString}`
-      )
-    );
+    // const requests: Observable<any>[] = this.initialCountries.map((country) =>
+    //   this.http.get(
+    //     `${REST_COUNTRIES_API}/name/${country}?fields=${this.filteredResponseFieldsString}`
+    //   )
+    // );
 
-    return forkJoin(requests).pipe(
-      map((responses) => {
-        if (responses.length === 0) return [];
+    // return forkJoin(requests).pipe(
+    //   map((responses) => {
+    //     if (responses.length === 0) return [];
 
-        return responses
-          .filter((response) => response.status !== 404)
-          .map((response) => response[0]);
-      })
-    );
+    //     return responses
+    //       .filter((response) => response.status !== 404)
+    //       .map((response) => response[0]);
+    //   })
+    // );
+
+    return this.http.get(
+      `${REST_COUNTRIES_API}/all?fields=${this.filteredResponseFieldsString}`
+    ) as Observable<Country[]>;
   }
 
   getFilteredByRegionCountriesList(region: string): Observable<Object> {

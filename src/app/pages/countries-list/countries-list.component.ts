@@ -208,9 +208,9 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
   }
 
   loadSession() {
-    const sessionList = localStorage.getItem(LOCAL_STORAGE_KEY.LIST);
-    const showDetails = localStorage.getItem(LOCAL_STORAGE_KEY.SHOW_DETAILS);
-    const selectedCountryDetails = localStorage.getItem(
+    const sessionList = sessionStorage.getItem(LOCAL_STORAGE_KEY.LIST);
+    const showDetails = sessionStorage.getItem(LOCAL_STORAGE_KEY.SHOW_DETAILS);
+    const selectedCountryDetails = sessionStorage.getItem(
       LOCAL_STORAGE_KEY.SELECTED_COUNTRY_DETAILS
     );
 
@@ -235,14 +235,14 @@ export class CountriesComponent implements OnInit, AfterViewChecked {
     selectedCountryDetails: boolean
   ) {
     if (list && this.searchField.nativeElement.value === '')
-      localStorage.setItem(LOCAL_STORAGE_KEY.LIST, JSON.stringify(list));
+      sessionStorage.setItem(LOCAL_STORAGE_KEY.LIST, JSON.stringify(list));
     if (showDetails)
-      localStorage.setItem(
+      sessionStorage.setItem(
         LOCAL_STORAGE_KEY.SHOW_DETAILS,
         JSON.stringify(this.showSelectedCountryDetails())
       );
     if (selectedCountryDetails) {
-      localStorage.setItem(
+      sessionStorage.setItem(
         LOCAL_STORAGE_KEY.SELECTED_COUNTRY_DETAILS,
         JSON.stringify(this.selectedCountryDetails())
       );
