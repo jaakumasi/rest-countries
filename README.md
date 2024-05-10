@@ -4,9 +4,18 @@ An Angular web appplication for a detailed report about any country.
 
 ## Contents
 
+- [Features](#features)
 - [Site demo link](#demo)
 - [Dev Setup](#dev-setup)
 - [Folder Structure](#folder-structure)
+
+## Features
+
+- `Perusing through a list of countries`
+- `Quering for a specific country`
+- `Filtering the list of countries by region`
+- `A detailed view of a selected country`
+- `Browsing through the border countries (if available) of any selected country`
 
 ## Demo
 
@@ -26,7 +35,7 @@ Install dependencies
 cd rest-countries && npm install
 ```
 
-Run dev server
+Run the dev server
 
 ```bash
 ng serve
